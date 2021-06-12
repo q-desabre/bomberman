@@ -2,9 +2,10 @@
 #ifndef _AACTOR_HPP_
 # define _AACTOR_HPP_
 
+# include "Vector.hpp"
 # include "IDrawable.hpp"
 
-namespace bomber
+namespace engine
 {
   class AActor : public IDrawable
   {
@@ -17,22 +18,22 @@ namespace bomber
       return DrawableType::ACTOR;
     }
 
-    Vec3<float>		getScale() const
+    const v3&		getScale() const
     {
       return this->scale;
     }
 
-    void		setScale(Vec3<float> newScale)
+    void		setScale(const v3& newScale)
     {
       this->scale = newScale;
     }
 
-    Vec3<float>		getPosition() const
+    const v3&		getPosition() const
     {
       return position;
     }
 
-    void		setPosition(Vec3<float> newPos)
+    void		setPosition(const v3& newPos)
     {
       this->position = newPos;
     }
@@ -41,22 +42,27 @@ namespace bomber
     {
       this->angleRotation = angle;
     }
+
+    float		getAngleRotation() const
+    {
+      return this->angleRotation;
+    }
     
-    Vec3<float>		getRotation() const
+    const v3&		getRotation() const
     {
       return rotation;
     }
 
-    void		setRotation(Vec3<float> newR)
+    void		setRotation(const v3& newR)
     {
       this->rotation = newR;
     }
     
   protected:
-    float		angleRotation;
-    Vec3<float>		position;
-    Vec3<float>		scale;
-    Vec3<float>		rotation;
+    float	angleRotation = 0.0f;
+    v3		position = v3(0, 0, 0);
+    v3		scale = v3(1, 1, 1);
+    v3		rotation = v3(0, 1, 0);
   };
 };
 

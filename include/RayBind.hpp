@@ -2,20 +2,20 @@
 #ifndef _RAYKEYBIND_HPP_
 # define _RAYKEYBIND_HPP_
 
-# include "AKeybind.hpp"
+# include "ABind.hpp"
 # include "raylib.h"
 
-namespace bomber
+namespace engine
 {
-  class RayKeybind : public AKeybind
+  class RayBind : public ABind
   {
   public:
-    RayKeybind()
+    RayBind()
     {
       init();
     }
 
-    ~RayKeybind()
+    ~RayBind()
     {
 
     }

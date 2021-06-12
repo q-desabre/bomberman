@@ -7,7 +7,7 @@
 #include "AActor.hpp"
 #include "RayCollisionBox.hpp"
 
-namespace bomber
+namespace engine
 {
   const float CUBE_SIZE = 1.0f;
   const float CUBE_HEIGHT = 1.0f;
@@ -15,9 +15,9 @@ namespace bomber
   class RayCube : public AActor, public ICollidable
   {
   public:
-    RayCube(Vec3<float> p = Vec3<float>(0, 0, 0),
-	    Color c = WHITE) : color(c)
+    RayCube(Vec3<float> p = Vec3<float>(0, 0, 0))
     {
+      this->color = WHITE;
       this->isTextured = false;
       this->size.x = CUBE_SIZE;
       this->size.y = CUBE_HEIGHT;
@@ -49,18 +49,18 @@ namespace bomber
 
     }
 
-    const ACollider&	getCollider() const
+    const engine::ACollider&	getCollider() const
     {
       return *(this->collisionBox);
     }
 
-    bool		collide(const ACollider& other) const
+    bool		collide(const engine::ACollider& other) const
     {
       return this->collisionBox->collide(other);
     }
 
 
-    void		draw(int frame = 1)
+    void		draw(int frame)
     {
       DrawCubeTexture(this->texture, (Vector3){position.x, position.y, position.z},
 	       size.x, size.y, size.z, color);

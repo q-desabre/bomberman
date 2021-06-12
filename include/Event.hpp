@@ -2,7 +2,7 @@
 #ifndef _EVENT_HPP_
 # define _EVENT_HPP_
 
-namespace bomber
+namespace engine
 {
   enum Event
     {

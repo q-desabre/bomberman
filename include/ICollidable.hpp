@@ -4,7 +4,7 @@
 
 # include "ACollider.hpp"
 
-namespace bomber
+namespace engine
 {
   
   class ICollidable

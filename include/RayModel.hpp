@@ -1,25 +1,25 @@
 
-#ifndef _CUBE_HPP_
-# define _CUBE_HPP_
+#ifndef _RAYMODEL_HPP_
+# define _RAYMODEL_HPP_
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <Vector.hpp>
 #include <sstream>
-#include "IModel.hpp"
+#include "AActor.hpp"
 
-namespace bomber
+namespace engine
 {
-  class RayModel : public AActor
+  class RayModel : public engine::AActor
   {
   public:
     RayModel(const std::string& pathObj, const std::string& pathTexture,
 	     int _nbFrames) : nbFrames(_nbFrames), models(_nbFrames)
     {
-      this->scale.x = 0.15f;
-      this->scale.y = 0.15f;
-      this->scale.z = 0.15f;
+      this->scale.x = 0.25f;
+      this->scale.y = 0.25f;
+      this->scale.z = 0.25f;
       this->rotation.x = 0;
       this->rotation.y = 1;
       this->rotation.z = 0;
@@ -31,10 +31,8 @@ namespace bomber
 	if (i < 10)
 	  ss << "0";
 	ss << i << ".obj";
-	std::cout << ss.str() << std::endl;
 	models[i - 1] = LoadModel(ss.str().c_str());
 	texture = LoadTexture(pathTexture.c_str());
-	//	SetTextureFilter(this->texture, TEXTURE_FILTER_ANISOTROPIC_16X); 
 	models[i - 1].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
       }
     }

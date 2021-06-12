@@ -6,18 +6,21 @@
 # include "RayCamera.hpp"
 # include "ARenderer.hpp"
 
-namespace bomber
+namespace engine
 {
+  const int WINDOW_WIDTH = 1600;
+  const int WINDOW_HEIGHT = 900;
+  
   class	RayRenderer : public ARenderer
   {
   public:
     RayRenderer()
     {
-      Vec3<float>	CameraPosition(0, 15, 12);
+      Vec3<float>	CameraPosition(0, 17, 3.2);
       Vec3<float>	CameraTarget(0, 0, 0);
       Vec3<float>	CameraUp(0, 10, 0);
       
-      initWindow(1024, 768, "Bomberman by Quentin");
+      initWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Bomberman by Quentin");
       initCamera(CameraPosition, CameraTarget, CameraUp, 45);
       setFps(60);
     }
@@ -32,8 +35,8 @@ namespace bomber
 
     }
 
-    void		initCamera(Vec3<float> pos, Vec3<float> target,
-				   Vec3<float> up, float fovy)
+    void		initCamera(const v3& pos, const v3& target,
+				   const v3& up, float fovy)
     {
       this->camera = new RayCamera();
       this->camera->initCamera(pos, target, up, fovy);
@@ -44,23 +47,30 @@ namespace bomber
 			   const std::string& name)
     {
       this->window = new RayWindow(width, height, name);
-      ToggleFullscreen();
     }
 
-    void	draw()
+    void	draw(std::vector<IDrawable*> drawables)
     {
       BeginDrawing();
       camera->setMode3D(true);
-      for (int i = 0; i != actors.size(); i++) {
-	actors[i]->draw();
+
+      for (int i = 0; i != drawables.size(); i++) {
+	if (drawables[i]->getDrawableType() == ACTOR)
+	  drawables[i]->draw();
       }
+
+
       camera->setMode3D(false);
 
-      // for widget
-      DrawRectangle(0, 0, 1024, 121, GRAY);
-      DrawRectangle(0, 121, 1024, 2, BLACK);
+      for (int i = 0; i != drawables.size(); i++) {
+      	if (drawables[i]->getDrawableType() == WIDGET)
+      	  drawables[i]->draw();
+      }
+      // // for widget
+      DrawRectangle(0, 0, WINDOW_WIDTH, 50, GRAY);
+      DrawRectangle(0, 50, WINDOW_WIDTH, 2, BLACK);
       DrawFPS(10, 10);
-      DrawText("Welcome to the third dimension!", 10, 40, 20, DARKGRAY);
+      // DrawText("Welcome to the third dimension!", 10, 40, 20, DARKGRAY);
 
       EndDrawing();
     }

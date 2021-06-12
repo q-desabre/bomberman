@@ -2,9 +2,10 @@
 #ifndef _RAY_BOX_COLLISION_
 # define _RAY_BOX_COLLISION_
 
+# include "raylib.h"
 # include "ICollidable.hpp"
 
-namespace bomber
+namespace engine
 {
   class RayCollisionBox : public ACollider
   {

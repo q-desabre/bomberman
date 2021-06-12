@@ -2,7 +2,7 @@
 #ifndef _IDRAWABLE_HPP_
 # define _IDRAWABLE_HPP_
 
-namespace bomber
+namespace engine
 {
   enum DrawableType
     {

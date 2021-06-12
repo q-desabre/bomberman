@@ -5,7 +5,7 @@
 # include "IWindow.hpp"
 # include "raylib.h"
 
-namespace bomber
+namespace engine
 {  
   class RayWindow : public IWindow
   {

@@ -2,7 +2,7 @@
 #ifndef _IWINDOW_HPP_
 # define _WINDOW_HPP_
 
-namespace bomber
+namespace engine
 {
   class IWindow
   {

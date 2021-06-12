@@ -4,7 +4,7 @@
 
 # include "Vector.hpp"
 
-namespace bomber
+namespace engine
 {  
   enum CollisionType
     {

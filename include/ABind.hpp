@@ -5,9 +5,9 @@
 # include <map>
 # include "Event.hpp"
 
-namespace bomber
+namespace engine
 {
-  class AKeybind
+  class ABind
   {
   public:
     virtual void	init() = 0;

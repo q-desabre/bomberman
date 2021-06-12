@@ -5,7 +5,7 @@
 # include <vector>
 # include "AActor.hpp"
 
-namespace bomber
+namespace engine
 {
   class ARenderer : public IWindow , public ACamera
   {
@@ -13,12 +13,12 @@ namespace bomber
     ARenderer() {}
     virtual ~ARenderer() {}
 
-    virtual void        draw() = 0;
+    virtual void        draw(std::vector<IDrawable*>) = 0;
     virtual void        updateEvents() = 0;
     virtual void	setFps(int fpsMax) = 0;
     virtual void	initWindow(const int, const int, const std::string&) = 0;
-    virtual void	initCamera(Vec3<float> pos, Vec3<float> target,
-				   Vec3<float> up, float fovy) = 0;
+    virtual void	initCamera(const v3& pos, const v3& target,
+				   const v3& up, float fovy) = 0;
 
     virtual void        clear()
     {
@@ -35,12 +35,19 @@ namespace bomber
       return this->window->isOpen();
     }
 
-    void		setPosition(Vec3<float> newPos)
+    void		setPosition(const v3& newPos)
     {
       this->camera->setPosition(newPos);
     }
+
+    const v3&		getPosition() const
+    {
+      v3 tmp = this->camera->getPosition();
+      //      std::cout << "tmp.x " << tmp.x << " tmp.y " << tmp.y << " tmp.z " << tmp.z << std::endl;
+      return this->camera->getPosition();
+    }
     
-    void		setTarget(Vec3<float> newTarget)
+    void		setTarget(const v3& newTarget)
     {
       this->camera->setTarget(newTarget);
     }
@@ -50,18 +57,10 @@ namespace bomber
       this->camera->setMode3D(status);
     }
 
-    // METHOD
-    
-    void	addActor(AActor *actor)
-    {
-      actors.push_back(actor);
-    }
     
   protected:
-    std::vector<AActor *>	actors;
-    
-    bomber::ACamera	*camera;
-    bomber::IWindow	*window;
+    ACamera	*camera;
+    IWindow	*window;
   };
 }
 
