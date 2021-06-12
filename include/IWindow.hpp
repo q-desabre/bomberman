@@ -2,6 +2,8 @@
 #ifndef _IWINDOW_HPP_
 # define _WINDOW_HPP_
 
+#include <iostream>
+
 namespace engine
 {
   class IWindow
