@@ -6,6 +6,11 @@
 #include <vector>
 #include <iostream>
 
+namespace engine
+{
+  int		generateUid();
+}
+
 namespace bomber
 {
   bool		isCharInString(const std::string & str, char c);

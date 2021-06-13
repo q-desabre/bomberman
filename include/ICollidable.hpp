@@ -11,7 +11,8 @@ namespace engine
   {
   public:
     virtual const ACollider&	getCollider() const = 0;
-    virtual bool		collide(const ACollider& other) const = 0; 
+    virtual bool		collide(const ACollider& other) const = 0;
+    virtual int			getUid() const = 0;
   };
 
 }

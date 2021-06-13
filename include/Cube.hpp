@@ -19,9 +19,15 @@ namespace bomber
     Cube(Vec3<float> p, const std::string& texture_path, BlockType t = UNBREAKABLE)
       : engine::RayCube(p, texture_path), type(t)
     {
+      type = t;
     }
 
     ~Cube() {}
+
+    void		spawnPowerUp()
+    {
+      std::cout << __func__ << std::endl;
+    }
 
     BlockType	getType() const
     {

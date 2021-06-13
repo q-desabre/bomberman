@@ -1,6 +1,7 @@
 #ifndef _MAP_HPP_
 # define _MAP_HPP_
 
+# include <memory>
 # include <fstream>
 # include <vector>
 # include "Cube.hpp"
@@ -14,10 +15,10 @@ namespace bomber
   public:
     Map(const std::string& path, int nbPlayer = 2)
     {
-      Cube		*tmp;
-      int		y = 0;
-      std::string	line;
-      std::ifstream	myFile;
+      std::shared_ptr<Cube>		tmp;
+      int				y = 0;
+      std::string			line;
+      std::ifstream			myFile;
       
       myFile.open(path);
       if (myFile.is_open()) {
@@ -29,27 +30,27 @@ namespace bomber
 	  else {
 	    map.push_back(line);
 	    for (int i = 0; i != line.size(); i++) {
-	      addBlock(v3(i, -1, y - 2), "../assets/block5.png", false);
+	      addBlock(v3(i, -1, height - (y - 1)), "../assets/block5.png", false);
 	      if (line[i] == 'X') {
-		addBlock(v3(i, 0, y - 2), "../assets/block4.png", true);
+		addBlock(v3(i, 0, height - (y - 1)), "../assets/block4.png", true);
 	      }
 	    }
 	  }
 	  y++;
 	}
-	tmp = new Cube(v3(0, -engine::CUBE_HEIGHT / 2 - 1, 0),
-		       "../assets/block_background.png");
+	tmp = std::make_shared<Cube>(v3(0, -engine::CUBE_HEIGHT / 2 - 1, 0),
+				     "../assets/block_background.png");
 	tmp->setSize(v3(2.5f * width, 0.2f, height * 2.5f));
-	actors.push_back(tmp);
+	addActor(tmp);
       }
       myFile.close();
-      generateBreakable();
+           // generateBreakable();
     }
 
     void		generateBreakable()
     {
-      int		x;
-      int		y;
+      int		x = 0;
+      int		y = 0;
       
       for (int j = 0; j != height; j++)
 	std::cout << map[j] << std::endl;
@@ -57,34 +58,37 @@ namespace bomber
 	x = rand() % (width - 1);
 	y = rand() % (height - 1);
 	if (isSpawnOk(map, y, x)) {
-	  addBlock(v3(x, 0, y), "../assets/block_brick.png", true);
+	  addBlock(v3(x, 0, y), "../assets/block_brick.png", true, BREAKABLE);
 	  map[y][x] = 'b';
 	  i++;
 	}
       }
     }
   
-    void		addBlock(const v3& pos, const std::string& path, bool collide)
+    void		addBlock(const v3& pos, const std::string& path, bool collide,
+				 BlockType t = UNBREAKABLE)
     {
-      Cube		*tmp;
+      std::shared_ptr<Cube>		tmp;
 
-      tmp = new Cube(v3(width * -(engine::CUBE_SIZE / 2) + (engine::CUBE_SIZE / 2) + pos.x,
-			(engine::CUBE_HEIGHT / 2) + pos.y,
-			height * (engine::CUBE_SIZE / 2) - (engine::CUBE_SIZE / 2) - pos.z),
-		     path.c_str());
+      tmp = std::make_shared<Cube>(v3(width * -(engine::CUBE_SIZE / 2) +
+				      (engine::CUBE_SIZE / 2) + pos.x,
+				      (engine::CUBE_HEIGHT / 2) + pos.y,
+				      height * (engine::CUBE_SIZE / 2) -
+				      (engine::CUBE_SIZE / 2) - pos.z),
+				   path.c_str(), t);
       if (collide)
 	collidableActors.push_back(tmp);
-      actors.push_back(tmp);
+      addActor(tmp);
     }
 
     ~Map() {}
 
-    const std::vector<engine::AActor *>&	getActors() const
+    const std::vector<std::shared_ptr<engine::AActor>>&	getActors() const
     {
       return (this->actors);
     }
 
-    const std::vector<engine::ICollidable *>&	getCollidableActors() const
+    const std::vector<std::shared_ptr<engine::ICollidable>>&	getCollidableActors() const
     {
       return (this->collidableActors);
     }
@@ -94,32 +98,52 @@ namespace bomber
       return map;
     }
     
-    void			addActor(engine::AActor *actor)
+    void			addActor(std::shared_ptr<engine::AActor> actor)
     {
       actors.push_back(actor);
     }
       
-    void			removeActor(engine::AActor *actor)
+    void			removeActor(std::shared_ptr<engine::AActor> actor)
     {
-      std::cout << actors.size() << std::endl;
+      std::cout << "Remove id : " << actor->getUid() << " / " << actors.size() << std::endl;
       for (int i = 0; i != actors.size(); i++) {
-	if (actors[i]->getUid() == actor->getUid())
+	if (actors[i]->getUid() == actor->getUid()) {
 	  actors.erase(actors.begin() + i);
+	  break;
+	}
       }
-      std::cout << actors.size() << std::endl;
     }
-      
-    void			addCollidableActor(engine::ICollidable *actor)
+
+    void			removeCollidableActor(std::shared_ptr<engine::ICollidable> actor)
+    {
+      for (int i = 0; i != collidableActors.size(); i++) {
+	if (collidableActors[i]->getUid() == actor->getUid()) {
+	  collidableActors.erase(collidableActors.begin() + i);
+	  break;
+	}
+      }
+    }
+
+    std::shared_ptr<engine::AActor>	getActorByUid(int uid)
+    {
+      for (int i = 0; i!= actors.size(); i++) {
+	if (actors[i]->getUid() == uid)
+	  return actors[i];
+      }
+      return nullptr;
+    }
+    
+    void			addCollidableActor(std::shared_ptr<engine::ICollidable> actor)
     {
       collidableActors.push_back(actor);
     }
       
   private:
-    int				width;
-    int				height;
+    int				width = 0;
+    int				height = 0;
     std::vector<std::string>	map;
-    std::vector<engine::AActor *>	actors;
-    std::vector<engine::ICollidable *>	collidableActors;
+    std::vector<std::shared_ptr<engine::AActor>>	actors;
+    std::vector<std::shared_ptr<engine::ICollidable>>	collidableActors;
   };
 }
 

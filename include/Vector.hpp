@@ -2,6 +2,8 @@
 #ifndef _VECTOR_HPP_
 # define _VECTOR_HPP_
 
+# include <iostream>
+
 template <class T>
 class		Vec2
 {
@@ -61,11 +63,21 @@ public:
   }
   
   ~Vec3() {}
-     
+
+
+
   T	x;
   T	y;
   T	z;
 };
+
+
+template <class T>
+std::ostream& operator<<( std::ostream &flux, Vec3<T> const& v )
+{
+  return flux << "x -> " << v.x << " y -> " << v.y << " z -> " << v.z << std::endl;
+}
+
 
 typedef Vec3<float> v3;
 

@@ -15,7 +15,7 @@ namespace engine
   class RayCube : public AActor, public ICollidable
   {
   public:
-    RayCube(Vec3<float> p = Vec3<float>(0, 0, 0))
+    RayCube(const v3& p = Vec3<float>(0, 0, 0))
     {
       this->color = WHITE;
       this->isTextured = false;
@@ -28,7 +28,7 @@ namespace engine
       this->collisionBox = new RayCollisionBox(this->position, this->size);
     }
 
-    RayCube(Vec3<float> p = Vec3<float>(0, 0, 0),
+    RayCube(const v3& p = Vec3<float>(0, 0, 0),
 	    const std::string& texture_path = "../assets/default.png")
     {
       this->isTextured = true;
@@ -47,6 +47,12 @@ namespace engine
     ~RayCube()
     {
 
+    }
+
+
+    int			getUid() const
+    {
+      return uid;
     }
 
     const engine::ACollider&	getCollider() const

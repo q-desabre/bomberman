@@ -2,6 +2,7 @@
 #ifndef ILEVEL_HPP_
 # define ILEVEL_HPP_
 
+# include <memory>
 # include <vector>
 # include "Map.hpp"
 # include "AActor.hpp"
@@ -15,7 +16,7 @@ namespace bomber
   public:
     virtual void update(Core &c) = 0;
 
-    const std::vector<engine::AActor*>& getActors() const
+    const std::vector<std::shared_ptr<engine::AActor>>& getActors() const
     {
       return map->getActors();
     }
@@ -26,8 +27,7 @@ namespace bomber
     }
     
   protected:
-    Map					*map;
-    std::vector<engine::AActor*>	actors;
+    std::unique_ptr<Map>		map;
   };
 
 }

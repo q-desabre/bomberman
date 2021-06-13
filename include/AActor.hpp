@@ -2,19 +2,12 @@
 #ifndef _AACTOR_HPP_
 # define _AACTOR_HPP_
 
+# include "Utils.hpp"
 # include "Vector.hpp"
 # include "IDrawable.hpp"
 
 namespace engine
 {
-  static int		generateUid()
-  {
-    static int		i = 0;
-
-    i++;
-    std::cout << "fuck " << i << std::endl;
-    return (i);
-  }
   
   class AActor : public IDrawable
   {
@@ -22,7 +15,6 @@ namespace engine
   public:
     AActor() : uid(generateUid())
     {
-      std::cout << "Uid ->" <<  getUid() << std::endl;
     }
     virtual void		draw() = 0;
 

@@ -16,16 +16,17 @@ namespace bomber
   public:
     Player(int _id) : id(_id)
     {
+      std::cout << "Player" << id << " : " << getUid() << std::endl;
       this->isMoving = false;
       if (id == 1) 
-	this->model = new engine::RayAnimation("../assets/steve/steve_0000",
-					       "../assets/steve/skin.png", 40);
+	this->model = std::make_unique<engine::RayAnimation>("../assets/steve/steve_0000",
+							     "../assets/steve/skin.png", 40);
       else if (id == 2)
-	this->model = new engine::RayAnimation("../assets/steve/steve_0000",
-					       "../assets/steve/skin2.png", 40);
+	this->model = std::make_unique<engine::RayAnimation>("../assets/steve/steve_0000",
+							     "../assets/steve/skin2.png", 40);
       	
-      this->collisionBox = new engine::RayCollisionBox(this->model->getPosition(),
-					       Vec3<float>(0.55, 0.55, 0.55));
+      this->collisionBox = std::make_unique<engine::RayCollisionBox>(this->model->getPosition(),
+								     Vec3<float>(0.55, 0.55, 0.55));
     }
     
     ~Player()
@@ -33,11 +34,23 @@ namespace bomber
 
     }
 
+
+    int			getUid() const
+    {
+      return uid;
+    }
+
     void		update(const engine::ABind& key, Map& map)
     { // change to std::map<event, ptr method> depends on id
       Vec3<float> tmpPos = this->position;
       for (int i = 0; i != bombs.size(); i++) {
 	bombs[i]->update(map);
+	if (bombs[i]->isAlive() == false) {
+	  map.removeActor(bombs[i]);
+	  bombs.erase(bombs.begin() + i);
+	  i = - 1;
+	  continue;
+	}
       }
       
       if (id == 1) {
@@ -62,7 +75,8 @@ namespace bomber
 	    this->collisionBox->setPosition(this->position);
 	}
       }
-
+      // if (id == 1)
+      // 	std::cout << "player " << this->position.x << std::endl;
       // this->position = v3(position.x - std::fmod(position.x, 0.5f),
       // 			  position.y,
       // 			  position.z - std::fmod(position.z, 0.5f));
@@ -135,21 +149,21 @@ namespace bomber
 	  return;
       }
       
-      Bomb	*b = new Bomb(v3(this->position.x, this->position.y + 0.5f, this->position.z), 2);
+      std::shared_ptr<Bomb>	b = std::make_shared<Bomb>(v3(this->position.x,
+							      this->position.y + 0.5f,
+							      this->position.z), 2);
 
-      std::cout << "this " << this->getUid() << std::endl;
-      std::cout << "bomb " << b->getUid() << std::endl;
-      
       map.addActor(b);
       bombs.push_back(b);
+      // gestion collision player self and other TODO
     }
 
   private:
-    bool	isMoving;
-    int		id;
-    std::vector<Bomb *>		bombs;
-    engine::RayAnimation	*model;
-    engine::ACollider		*collisionBox;
+    bool					isMoving;
+    int						id;
+    std::vector<std::shared_ptr<Bomb>>		bombs;
+    std::unique_ptr<engine::RayAnimation>	model;
+    std::unique_ptr<engine::ACollider>		collisionBox;
   };
 
 }

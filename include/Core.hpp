@@ -18,9 +18,9 @@ namespace bomber
     {
       srand(time(NULL));
       this->running = true;
-      this->keybind = new engine::RayBind();
-      this->renderer = new engine::RayRenderer();
-      this->levels.push(new GameLevel());
+      this->keybind = std::make_unique<engine::RayBind>();
+      this->renderer = std::make_unique<engine::RayRenderer>();
+      this->levels.push(std::make_unique<GameLevel>());
     }
 
     ~Core()
@@ -49,21 +49,22 @@ namespace bomber
     {
       this->running = false;
     }
-    engine::ARenderer		*getRenderer()
+    
+    engine::ARenderer&		getRenderer()
     {
-      return (this->renderer);
+      return (*this->renderer);
     }
 
-    engine::ABind		*getKeybind()
+    engine::ABind&		getKeybind()
     {
-      return (this->keybind);
+      return (*this->keybind);
     }
     
   private:
-    bool			running;
-    std::stack<ALevel *>	levels;
-    engine::ABind		*keybind;
-    engine::ARenderer		*renderer;
+    bool				running;
+    std::stack<std::unique_ptr<ALevel>>	levels;
+    std::unique_ptr<engine::ABind>	keybind;
+    std::unique_ptr<engine::ARenderer>	renderer;
   };
 }
 

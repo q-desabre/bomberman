@@ -10,7 +10,7 @@ namespace engine
   class RayCollisionBox : public ACollider
   {
   public:
-    RayCollisionBox(Vec3<float> pos, Vec3<float> s, CollisionType type = BLOCK)
+    RayCollisionBox(const v3& pos, const v3& s, CollisionType type = BLOCK)
       : ACollider(pos, s, type) {}
     ~RayCollisionBox() {}
     

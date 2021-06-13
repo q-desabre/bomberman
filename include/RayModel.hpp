@@ -2,6 +2,10 @@
 #ifndef _RAYMODEL_HPP_
 # define _RAYMODEL_HPP_
 
+# include <iostream>
+# include "raylib.h"
+# include "AActor.hpp"
+
 namespace engine
 {
   class RayModel : public engine::AActor

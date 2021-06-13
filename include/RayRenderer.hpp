@@ -38,7 +38,7 @@ namespace engine
     void		initCamera(const v3& pos, const v3& target,
 				   const v3& up, float fovy)
     {
-      this->camera = new RayCamera();
+      this->camera = std::make_unique<RayCamera>();
       this->camera->initCamera(pos, target, up, fovy);
     }
 
@@ -46,7 +46,7 @@ namespace engine
     void	initWindow(const int width, const int height,
 			   const std::string& name)
     {
-      this->window = new RayWindow(width, height, name);
+      this->window = std::make_unique<RayWindow>(width, height, name);
     }
 
     void	draw(const std::vector<IDrawable*>& drawables)
@@ -75,7 +75,7 @@ namespace engine
       EndDrawing();
     }
 
-    void	draw(const std::vector<AActor*>& actors)
+    void	draw(const std::vector<std::shared_ptr<AActor>>& actors)
     {
       BeginDrawing();
       camera->setMode3D(true);

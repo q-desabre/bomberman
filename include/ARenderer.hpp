@@ -3,7 +3,9 @@
 # define _ARENDERER_HPP_
 
 # include <vector>
+# include <memory>
 # include "AActor.hpp"
+
 
 namespace engine
 {
@@ -14,7 +16,7 @@ namespace engine
     virtual ~ARenderer() {}
 
     virtual void        draw(const std::vector<IDrawable*>&) = 0;
-    virtual void        draw(const std::vector<AActor*>&) = 0;
+    virtual void        draw(const std::vector<std::shared_ptr<AActor>>&) = 0;
     virtual void        updateEvents() = 0;
     virtual void	setFps(int fpsMax) = 0;
     virtual void	initWindow(const int, const int, const std::string&) = 0;
@@ -60,8 +62,8 @@ namespace engine
 
     
   protected:
-    ACamera	*camera;
-    IWindow	*window;
+    std::unique_ptr<ACamera>	camera;
+    std::unique_ptr<IWindow>	window;
   };
 }
 
