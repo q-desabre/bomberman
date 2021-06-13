@@ -13,7 +13,8 @@ namespace engine
     ARenderer() {}
     virtual ~ARenderer() {}
 
-    virtual void        draw(std::vector<IDrawable*>) = 0;
+    virtual void        draw(const std::vector<IDrawable*>&) = 0;
+    virtual void        draw(const std::vector<AActor*>&) = 0;
     virtual void        updateEvents() = 0;
     virtual void	setFps(int fpsMax) = 0;
     virtual void	initWindow(const int, const int, const std::string&) = 0;

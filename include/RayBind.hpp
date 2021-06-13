@@ -27,7 +27,7 @@ namespace engine
       addBind(Event::PLAYER1_LEFT, KEY_LEFT);
       addBind(Event::PLAYER1_UP, KEY_UP);
       addBind(Event::PLAYER1_DOWN, KEY_DOWN);
-      addBind(Event::PLAYER1_ACTION1, -1);
+      addBind(Event::PLAYER1_ACTION, KEY_SPACE);
       addBind(Event::PLAYER1_ACTION2, -1);
       addBind(Event::PLAYER2_RIGHT, KEY_D);
       addBind(Event::PLAYER2_LEFT, KEY_A);

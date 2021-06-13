@@ -60,14 +60,6 @@ namespace engine
     }
 
 
-    void		draw(int frame)
-    {
-      DrawCubeTexture(this->texture, (Vector3){position.x, position.y, position.z},
-	       size.x, size.y, size.z, color);
-      DrawCubeWires((Vector3){position.x, position.y, position.z},
-		    size.x, size.y, size.z, DARKGRAY);
-    }
-
     void		draw()
     {
       // DrawCube((Vector3){position.x, position.y, position.z},

@@ -49,7 +49,7 @@ namespace engine
       this->window = new RayWindow(width, height, name);
     }
 
-    void	draw(std::vector<IDrawable*> drawables)
+    void	draw(const std::vector<IDrawable*>& drawables)
     {
       BeginDrawing();
       camera->setMode3D(true);
@@ -72,6 +72,21 @@ namespace engine
       DrawFPS(10, 10);
       // DrawText("Welcome to the third dimension!", 10, 40, 20, DARKGRAY);
 
+      EndDrawing();
+    }
+
+    void	draw(const std::vector<AActor*>& actors)
+    {
+      BeginDrawing();
+      camera->setMode3D(true);
+
+      for (int i = 0; i != actors.size(); i++) {
+	if (actors[i]->getDrawableType() == ACTOR)
+	  actors[i]->draw();
+      }
+
+
+      camera->setMode3D(false);
       EndDrawing();
     }
 

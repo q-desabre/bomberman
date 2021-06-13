@@ -19,6 +19,7 @@ int main(void)
   // graphic->addActor(&p2);
 
   // p2.setPosition(Vec3<float>(6.0f, 0, -6.0f));
+
   
   while (core.isRunning())
     {

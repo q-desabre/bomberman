@@ -24,7 +24,7 @@ namespace engine
     void		draw()
     {
       rlDisableBackfaceCulling();
-      if (timer.getElaspedTime() >= 0.16f)
+      if (timer.getElapsedTime() >= 0.16f)
       	{
       	  this->rotate(this->getAngleRotation() + 1.0f);
       	  if (this->getAngleRotation() >= 360)

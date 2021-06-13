@@ -37,7 +37,7 @@ namespace bomber
     void		draw()
     {
       this->renderer->clear();
-      this->renderer->draw(this->levels.top()->getDrawables());
+      this->renderer->draw(this->levels.top()->getMap().getActors());
     }
 
     bool			isRunning() const

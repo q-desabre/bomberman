@@ -14,16 +14,14 @@ namespace bomber
   class	GameLevel : public ALevel
   {
   public:
-    GameLevel() : map("../maps/map1.data")
+    GameLevel()
     {
+      map = new Map("../maps/map1.data");
       p1.setPosition(Vec3<float>(-8.0f, 0, 5.0f));
       p2.setPosition(Vec3<float>(8.0f, 0, -5.0f));
       isStarting = true;
-      this->drawables.push_back(&p1);
-      this->drawables.push_back(&p2);
-      for (int i = 0; i != map.getBlocks().size(); i++) {
-	this->drawables.push_back(map.getBlocks()[i]);
-      }
+      map->addActor(&p1);
+      map->addActor(&p2);
     }
     ~GameLevel() {}
     
@@ -34,8 +32,6 @@ namespace bomber
     Player		p2 = Player(2);
     engine::Timer	timer;
     bool		isStarting;
-    Map			map;
-
   };
 
 }

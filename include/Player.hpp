@@ -2,9 +2,10 @@
 #ifndef _PLAYER_HPP_
 # define _PLAYER_HPP_
 
-# include "RayModel.hpp"
+# include "RayAnimation.hpp"
 # include "RayCollisionBox.hpp"
 # include "RayBind.hpp"
+# include "Bomb.hpp"
 # include "Map.hpp"
 
 namespace bomber
@@ -17,11 +18,11 @@ namespace bomber
     {
       this->isMoving = false;
       if (id == 1) 
-	this->model = new engine::RayModel("../assets/steve/steve_0000",
-					   "../assets/steve/skin.png", 40);
+	this->model = new engine::RayAnimation("../assets/steve/steve_0000",
+					       "../assets/steve/skin.png", 40);
       else if (id == 2)
-	this->model = new engine::RayModel("../assets/steve/steve_0000",
-					   "../assets/steve/skin2.png", 40);
+	this->model = new engine::RayAnimation("../assets/steve/steve_0000",
+					       "../assets/steve/skin2.png", 40);
       	
       this->collisionBox = new engine::RayCollisionBox(this->model->getPosition(),
 					       Vec3<float>(0.55, 0.55, 0.55));
@@ -32,9 +33,12 @@ namespace bomber
 
     }
 
-    void		update(const engine::ABind& key, const Map& map)
+    void		update(const engine::ABind& key, Map& map)
     { // change to std::map<event, ptr method> depends on id
       Vec3<float> tmpPos = this->position;
+      for (int i = 0; i != bombs.size(); i++) {
+	bombs[i]->update(map);
+      }
       
       if (id == 1) {
 	this->isMoving = false;
@@ -42,6 +46,7 @@ namespace bomber
 	if (key.isEvent(engine::PLAYER1_UP)) moveUp(map);
 	if (key.isEvent(engine::PLAYER1_RIGHT)) moveRight(map);
 	if (key.isEvent(engine::PLAYER1_LEFT)) moveLeft(map);
+	if (key.isEvent(engine::PLAYER1_ACTION)) spawnBomb(map);
       } else if (id == 2) {
 	this->isMoving = false;
 	if (key.isEvent(engine::PLAYER2_DOWN)) moveDown(map);
@@ -50,13 +55,17 @@ namespace bomber
 	if (key.isEvent(engine::PLAYER2_LEFT)) moveLeft(map);
       }
       this->collisionBox->setPosition(this->position);
-      for (int i = 0; i != map.getCollidableBlocks().size(); i++) {
-	if (map.getCollidableBlocks()[i]->collide(*collisionBox)) {
+      for (int i = 0; i != map.getCollidableActors().size(); i++) {
+	if (map.getCollidableActors()[i]->collide(*collisionBox)) {
 	    this->position = tmpPos;
 	    this->isMoving = false;
 	    this->collisionBox->setPosition(this->position);
 	}
       }
+
+      // this->position = v3(position.x - std::fmod(position.x, 0.5f),
+      // 			  position.y,
+      // 			  position.z - std::fmod(position.z, 0.5f));
     }
     
     void		moveUp(const Map& map)
@@ -119,11 +128,28 @@ namespace bomber
       //      DrawCubeWires((Vector3){position.x, position.y + 1.6f, position.z}, 1, 3.2, 1, RED);
     }
 
+    void	spawnBomb(Map& map)
+    {
+      for (int i = 0; i != bombs.size(); i++) {
+	if (this->collide(bombs[i]->getCollider()))
+	  return;
+      }
+      
+      Bomb	*b = new Bomb(v3(this->position.x, this->position.y + 0.5f, this->position.z), 2);
+
+      std::cout << "this " << this->getUid() << std::endl;
+      std::cout << "bomb " << b->getUid() << std::endl;
+      
+      map.addActor(b);
+      bombs.push_back(b);
+    }
+
   private:
     bool	isMoving;
     int		id;
-    engine::AActor	*model;
-    engine::ACollider	*collisionBox;
+    std::vector<Bomb *>		bombs;
+    engine::RayAnimation	*model;
+    engine::ACollider		*collisionBox;
   };
 
 }

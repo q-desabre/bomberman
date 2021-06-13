@@ -17,7 +17,7 @@ namespace engine
       start = std::chrono::system_clock::now();
     }
 
-    float		getElaspedTime() const
+    float		getElapsedTime() const
     {
       vt end = std::chrono::system_clock::now(); 
       std::chrono::duration<double> diff = end - start;

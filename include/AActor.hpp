@@ -7,11 +7,30 @@
 
 namespace engine
 {
+  static int		generateUid()
+  {
+    static int		i = 0;
+
+    i++;
+    std::cout << "fuck " << i << std::endl;
+    return (i);
+  }
+  
   class AActor : public IDrawable
   {
+    
   public:
+    AActor() : uid(generateUid())
+    {
+      std::cout << "Uid ->" <<  getUid() << std::endl;
+    }
     virtual void		draw() = 0;
-    virtual void		draw(int) = 0;
+
+
+    virtual void		update()
+    {
+
+    }
     
     DrawableType	getDrawableType() const
     {
@@ -57,8 +76,14 @@ namespace engine
     {
       this->rotation = newR;
     }
+
+    int			getUid() const
+    {
+      return uid;
+    }
     
   protected:
+    int		uid;
     float	angleRotation = 0.0f;
     v3		position = v3(0, 0, 0);
     v3		scale = v3(1, 1, 1);

@@ -11,7 +11,7 @@ namespace engine
      PLAYER1_LEFT,
      PLAYER1_UP,
      PLAYER1_DOWN,
-     PLAYER1_ACTION1,
+     PLAYER1_ACTION,
      PLAYER1_ACTION2,
      PLAYER2_RIGHT,
      PLAYER2_LEFT,

@@ -3,7 +3,8 @@
 # define ILEVEL_HPP_
 
 # include <vector>
-# include "IDrawable.hpp"
+# include "Map.hpp"
+# include "AActor.hpp"
 
 namespace bomber
 {
@@ -14,14 +15,19 @@ namespace bomber
   public:
     virtual void update(Core &c) = 0;
 
-    const std::vector<engine::IDrawable*>& getDrawables() const
+    const std::vector<engine::AActor*>& getActors() const
     {
-      return this->drawables;
+      return map->getActors();
     }
 
+    const Map&				getMap() const
+    {
+      return *map;
+    }
+    
   protected:
-    std::vector<engine::IDrawable*>	drawables;
-
+    Map					*map;
+    std::vector<engine::AActor*>	actors;
   };
 
 }

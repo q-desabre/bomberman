@@ -28,7 +28,7 @@ namespace bomber
     {
       this->texture = textures[currentFrame];
       Cube::draw();
-      if (timer.getElaspedTime() >= 0.16f)
+      if (timer.getElapsedTime() >= 0.16f)
 	{
 	  timer.restart();
 	  currentFrame++;
