@@ -7,7 +7,8 @@ void		bomber::GameLevel::update(Core &c)
 {
   p1->update(c.getKeybind(), *this->map);
   p2->update(c.getKeybind(), *this->map);
-  
+  if (!p1->isAlive())
+    map->removeActor(map->getActorByUid(p1->getUid()));
 
 
   

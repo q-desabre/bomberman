@@ -23,7 +23,9 @@ namespace bomber
       p2->setPosition(Vec3<float>(8.0f, 0, -5.0f));
       isStarting = true;
       map->addActor(p1);
+      map->addCollidableActor(p1);
       map->addActor(p2);
+      map->addCollidableActor(p2);
     }
     ~GameLevel() {}
     

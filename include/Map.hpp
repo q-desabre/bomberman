@@ -133,6 +133,15 @@ namespace bomber
       return nullptr;
     }
     
+    std::shared_ptr<engine::ICollidable>	getCollidableActorByUid(int uid)
+    {
+      for (int i = 0; i!= collidableActors.size(); i++) {
+	if (collidableActors[i]->getUid() == uid)
+	  return collidableActors[i];
+      }
+      return nullptr;
+    }
+    
     void			addCollidableActor(std::shared_ptr<engine::ICollidable> actor)
     {
       collidableActors.push_back(actor);

@@ -16,6 +16,9 @@ namespace bomber
   public:
     Player(int _id) : id(_id)
     {
+      this->bombMax = 1;
+      this->power = 2;
+      this->alive = true;
       std::cout << "Player" << id << " : " << getUid() << std::endl;
       this->isMoving = false;
       if (id == 1) 
@@ -31,7 +34,7 @@ namespace bomber
     
     ~Player()
     {
-
+      std::cout << __func__ << std::endl;
     }
 
 
@@ -43,6 +46,7 @@ namespace bomber
     void		update(const engine::ABind& key, Map& map)
     { // change to std::map<event, ptr method> depends on id
       Vec3<float> tmpPos = this->position;
+
       for (int i = 0; i != bombs.size(); i++) {
 	bombs[i]->update(map);
 	if (bombs[i]->isAlive() == false) {
@@ -52,34 +56,32 @@ namespace bomber
 	  continue;
 	}
       }
-      
-      if (id == 1) {
-	this->isMoving = false;
-	if (key.isEvent(engine::PLAYER1_DOWN)) moveDown(map);
-	if (key.isEvent(engine::PLAYER1_UP)) moveUp(map);
-	if (key.isEvent(engine::PLAYER1_RIGHT)) moveRight(map);
-	if (key.isEvent(engine::PLAYER1_LEFT)) moveLeft(map);
-	if (key.isEvent(engine::PLAYER1_ACTION)) spawnBomb(map);
-      } else if (id == 2) {
-	this->isMoving = false;
-	if (key.isEvent(engine::PLAYER2_DOWN)) moveDown(map);
-	if (key.isEvent(engine::PLAYER2_UP)) moveUp(map);
-	if (key.isEvent(engine::PLAYER2_RIGHT)) moveRight(map);
-	if (key.isEvent(engine::PLAYER2_LEFT)) moveLeft(map);
-      }
-      this->collisionBox->setPosition(this->position);
-      for (int i = 0; i != map.getCollidableActors().size(); i++) {
-	if (map.getCollidableActors()[i]->collide(*collisionBox)) {
+
+      if (isAlive()) {
+	if (id == 1) {
+	  this->isMoving = false;
+	  if (key.isEvent(engine::PLAYER1_DOWN)) moveDown(map);
+	  if (key.isEvent(engine::PLAYER1_UP)) moveUp(map);
+	  if (key.isEvent(engine::PLAYER1_RIGHT)) moveRight(map);
+	  if (key.isEvent(engine::PLAYER1_LEFT)) moveLeft(map);
+	  if (key.isEvent(engine::PLAYER1_ACTION)) spawnBomb(map);
+	} else if (id == 2) {
+	  this->isMoving = false;
+	  if (key.isEvent(engine::PLAYER2_DOWN)) moveDown(map);
+	  if (key.isEvent(engine::PLAYER2_UP)) moveUp(map);
+	  if (key.isEvent(engine::PLAYER2_RIGHT)) moveRight(map);
+	  if (key.isEvent(engine::PLAYER2_LEFT)) moveLeft(map);
+	}
+	this->collisionBox->setPosition(this->position);
+	for (int i = 0; i != map.getCollidableActors().size(); i++) {
+	  if (map.getCollidableActors()[i]->getUid() != this->getUid() &&
+	      map.getCollidableActors()[i]->collide(*collisionBox)) {
 	    this->position = tmpPos;
 	    this->isMoving = false;
 	    this->collisionBox->setPosition(this->position);
+	  }
 	}
       }
-      // if (id == 1)
-      // 	std::cout << "player " << this->position.x << std::endl;
-      // this->position = v3(position.x - std::fmod(position.x, 0.5f),
-      // 			  position.y,
-      // 			  position.z - std::fmod(position.z, 0.5f));
     }
     
     void		moveUp(const Map& map)
@@ -158,7 +160,40 @@ namespace bomber
       // gestion collision player self and other TODO
     }
 
+    int		getPower() const
+    {
+      return this->power;
+    }
+
+    int		getBombMax() const
+    {
+      return this->power;
+    }
+
+    bool	isAlive() const
+    {
+      return this->alive;
+    }
+
+    void	setPower(int p)
+    {
+      this->power = p;
+    }
+
+    void	setBombMax(int bm)
+    {
+      this->bombMax = bm;
+    }
+
+    void	die()
+    {
+      this->alive = false;
+    }
+
   private:
+    int						power;
+    int						bombMax;
+    bool					alive;
     bool					isMoving;
     int						id;
     std::vector<std::shared_ptr<Bomb>>		bombs;

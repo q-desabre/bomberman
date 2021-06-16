@@ -117,6 +117,10 @@ namespace bomber
       else if (fmodx >= 0.5f)
 	position.x +=  (1 - fmodx);
     }
+
+    void		collideWithCube(Map & map, int i);
+    void		collideWithPlayer(Map & map, int i);
+    void		collideWithBomb(Map & map, int i);
     
   private:
     bool		alive;
