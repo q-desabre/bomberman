@@ -19,7 +19,6 @@ namespace bomber
       this->bombMax = 1;
       this->power = 2;
       this->alive = true;
-      std::cout << "Player" << id << " : " << getUid() << std::endl;
       this->isMoving = false;
       if (id == 1) 
 	this->model = std::make_unique<engine::RayAnimation>("../assets/steve/steve_0000",
@@ -49,10 +48,12 @@ namespace bomber
 
       for (int i = 0; i != bombs.size(); i++) {
 	bombs[i]->update(map);
+	if (!bombs[i]->collide(this->getCollider()))
+	    bombs[i]->setIsOverOwner(false);
 	if (bombs[i]->isAlive() == false) {
 	  map.removeActor(bombs[i]);
 	  bombs.erase(bombs.begin() + i);
-	  i = - 1;
+	  i = -1;
 	  continue;
 	}
       }
@@ -76,6 +77,9 @@ namespace bomber
 	for (int i = 0; i != map.getCollidableActors().size(); i++) {
 	  if (map.getCollidableActors()[i]->getUid() != this->getUid() &&
 	      map.getCollidableActors()[i]->collide(*collisionBox)) {
+	    Bomb * b = dynamic_cast<Bomb*>(map.getCollidableActors()[i].get());
+	    if (b && b->getOwnerUid() == getUid() && b->getIsOverOwner())
+	      continue;
 	    this->position = tmpPos;
 	    this->isMoving = false;
 	    this->collisionBox->setPosition(this->position);
@@ -121,27 +125,33 @@ namespace bomber
     {
       return this->collisionBox->collide(other);
     }
+
     void	draw()
     {
-      this->collisionBox->setPosition(this->position);
-      this->model->setPosition(this->position);
-      if (isMoving)
-	this->model->draw();
-      else
-	this->model->draw(0);
+      if (isAlive()) {
+	this->collisionBox->setPosition(this->position);
+	this->model->setPosition(this->position);
+	if (isMoving)
+	  this->model->draw();
+	else
+	  this->model->draw(0);
+      }
       // DrawCubeWires((Vector3){position.x, position.y + 0.5, position.z}, 0.55,
       // 		    0.55, 0.55, RED);
     }
 
     void	draw(int frame = 1)
     {
-      this->collisionBox->setPosition(this->position);
-      this->model->setPosition(this->position);
-      if (isMoving)
-	this->model->draw();
-      else
-	this->model->draw(0);
-      //      DrawCubeWires((Vector3){position.x, position.y + 1.6f, position.z}, 1, 3.2, 1, RED);
+      if (isAlive()) {
+	this->collisionBox->setPosition(this->position);
+	this->model->setPosition(this->position);
+	if (isMoving)
+	  this->model->draw();
+	else
+	  this->model->draw(0);
+	//      DrawCubeWires((Vector3){position.x, position.y + 1.6f, position.z},
+	// 1, 3.2, 1, RED);
+      }
     }
 
     void	spawnBomb(Map& map)
@@ -153,11 +163,12 @@ namespace bomber
       
       std::shared_ptr<Bomb>	b = std::make_shared<Bomb>(v3(this->position.x,
 							      this->position.y + 0.5f,
-							      this->position.z), 2);
+							      this->position.z), 2,
+							   getUid());
 
       map.addActor(b);
+      map.addCollidableActor(b);
       bombs.push_back(b);
-      // gestion collision player self and other TODO
     }
 
     int		getPower() const

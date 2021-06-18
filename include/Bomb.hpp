@@ -16,19 +16,18 @@ namespace bomber
   class Bomb : public engine::AActor, public engine::ICollidable
   {
   public:
-    Bomb(const v3& pos, int p)
-      : lifespan(3), power(p)
+    Bomb(const v3& pos, int p, int uid)
+      : lifespan(3), power(10), ownerUid(uid)
     {
+      this->isOverOwner = true;
       this->alive = true;
       this->exploded = false;
-      std::cout << "Player -> " << pos;
       snapToGrid(pos); // check other side of map
       this->model = std::make_unique<engine::RayModel>(position,
-						       "../assets/bomb/bomb.obj",
-						       "../assets/bomb/bomb.png");
-      this->scale.x = 0.4f;
-      this->scale.y = 0.4f;
-      this->scale.z = 0.4f;
+						       "../assets/AquaBomb/AquaBomb.obj", "none");
+      this->scale.x = 0.08f;
+      this->scale.y = 0.08f;
+      this->scale.z = 0.08f;
       this->model->setScale(this->scale);
       this->model->rotate(180);
       this->collisionBox = std::make_unique<engine::RayCollisionBox>(this->model->getPosition(),
@@ -42,19 +41,28 @@ namespace bomber
     void		lineFlame(Map &map, const v3& direction);
 	  
 
-    void		update(Map &map)
+    void		explode(Map &map)
     {
-      if (timer.getElapsedTime() > lifespan && exploded == false) {
+      if (!exploded) {
 	exploded = true;
 	std::shared_ptr<Flame> flame = std::make_shared<Flame>(v3(position.x, position.y, position.z));
-	map.addActor(flame);
-	flames.push_back(flame);
+	map.addActor(flame); // MOVE IT
+	flames.push_back(flame);  // MOVE IT
 	lineFlame(map, v3(1, 0, 0));
 	lineFlame(map, v3(-1, 0, 0));
 	lineFlame(map, v3(0, 0, 1));
 	lineFlame(map, v3(0, 0, -1));
 	this->model->setPosition(v3(position.x, position.y - 5, position.z));
+	map.removeActor(map.getActorByUid(getUid()));
+	map.removeCollidableActor(map.getCollidableActorByUid(getUid()));
 	timer.restart();
+      }
+    }
+    
+    void		update(Map &map)
+    {
+      if (timer.getElapsedTime() > lifespan && !exploded) {
+	explode(map);
       }
       if (timer.getElapsedTime() > lifespan && exploded) {
 	for (int i = 0; i != flames.size(); i++)
@@ -92,8 +100,22 @@ namespace bomber
       return uid;
     }
 
-  private:
+    int			getOwnerUid() const
+    {
+      return ownerUid;
+    }
 
+    bool		getIsOverOwner() const
+    {
+      return (this->isOverOwner);
+    }
+
+    void		setIsOverOwner(bool b)
+    {
+      this->isOverOwner = b;
+    }
+
+  private:
     void		snapToGrid(const v3 pos)
     {
       this->position = pos;
@@ -118,15 +140,17 @@ namespace bomber
 	position.x +=  (1 - fmodx);
     }
 
-    void		collideWithCube(Map & map, int i);
-    void		collideWithPlayer(Map & map, int i);
-    void		collideWithBomb(Map & map, int i);
-    
+    bool		collideWithCube(Map & map, int i);
+    bool		collideWithPlayer(Map & map, int i);
+    bool		collideWithBomb(Map & map, int i);
+        
   private:
     bool		alive;
     bool		exploded;
     float		lifespan;
     int			power;
+    int			ownerUid;
+    bool		isOverOwner;
     engine::Timer	timer;
     std::vector<std::shared_ptr<Flame>>	flames;
     std::unique_ptr<engine::RayModel>	model;

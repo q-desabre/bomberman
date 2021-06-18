@@ -30,9 +30,9 @@ namespace bomber
 	  else {
 	    map.push_back(line);
 	    for (int i = 0; i != line.size(); i++) {
-	      addBlock(v3(i, -1, height - (y - 1)), "../assets/block5.png", false);
+	      addBlock(v3(i, -1.0f, height - (y - 1)), "../assets/block5.png", false);
 	      if (line[i] == 'X') {
-		addBlock(v3(i, 0, height - (y - 1)), "../assets/block4.png", true);
+		addBlock(v3(i, -0.5f, height - (y - 1)), "../assets/block4.png", true);
 	      }
 	    }
 	  }
@@ -44,7 +44,7 @@ namespace bomber
 	addActor(tmp);
       }
       myFile.close();
-           // generateBreakable();
+      generateBreakable();
     }
 
     void		generateBreakable()
@@ -58,7 +58,7 @@ namespace bomber
 	x = rand() % (width - 1);
 	y = rand() % (height - 1);
 	if (isSpawnOk(map, y, x)) {
-	  addBlock(v3(x, 0, y), "../assets/block_brick.png", true, BREAKABLE);
+	  addBlock(v3(x, -0.5f, y), "../assets/block_brick.png", true, BREAKABLE);
 	  map[y][x] = 'b';
 	  i++;
 	}
@@ -76,6 +76,22 @@ namespace bomber
 				      height * (engine::CUBE_SIZE / 2) -
 				      (engine::CUBE_SIZE / 2) - pos.z),
 				   path.c_str(), t);
+      if (collide)
+	collidableActors.push_back(tmp);
+      addActor(tmp);
+    }
+
+    void		addAnimatedBlock(const v3& pos, const std::string& path, bool collide,
+				 BlockType t = UNBREAKABLE)
+    {
+      std::shared_ptr<AnimatedCube>		tmp;
+
+      tmp = std::make_shared<AnimatedCube>(v3(width * -(engine::CUBE_SIZE / 2) +
+				      (engine::CUBE_SIZE / 2) + pos.x,
+				      (engine::CUBE_HEIGHT / 2) + pos.y  - 0.48f,
+				      height * (engine::CUBE_SIZE / 2) -
+				      (engine::CUBE_SIZE / 2) - pos.z),
+				   path.c_str(), 5);
       if (collide)
 	collidableActors.push_back(tmp);
       addActor(tmp);

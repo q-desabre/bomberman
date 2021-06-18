@@ -30,14 +30,18 @@ namespace bomber
 
     void		update()
     {
+      //      std::cout << __PRETTY_FUNCTION__ << std::endl;
       this->keybind->update();
       this->levels.top()->update(*this);
+      //std::cout << "end of " << __PRETTY_FUNCTION__ << std::endl;
     }
 
     void		draw()
     {
+      //std::cout << __PRETTY_FUNCTION__ << std::endl;
       this->renderer->clear();
       this->renderer->draw(this->levels.top()->getMap().getActors());
+      //std::cout << "end of " << __PRETTY_FUNCTION__ << std::endl;
     }
 
     bool			isRunning() const

@@ -15,8 +15,10 @@ namespace engine
     {
       this->position = pos;
       this->model = LoadModel(path.c_str());
-      this->texture = LoadTexture(pathTexture.c_str());
-      this->model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = this->texture;
+      if (pathTexture != "none") {
+	this->texture = LoadTexture(pathTexture.c_str());
+	this->model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = this->texture;
+      }
     }
 
     ~RayModel()

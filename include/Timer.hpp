@@ -6,7 +6,6 @@
 
 typedef std::chrono::time_point<std::chrono::system_clock> vt;
 
-
 namespace engine
 {
   class Timer

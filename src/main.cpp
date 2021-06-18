@@ -4,6 +4,7 @@
 int main(void)
 {
   bomber::Core			core;
+  Texture2D			texture = LoadTexture("../assets/block4.png");
 
   // bomber::Player		p1(1);
   // bomber::Player		p2(2);
