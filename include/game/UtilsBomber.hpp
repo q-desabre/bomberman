@@ -1,15 +1,9 @@
 
-#ifndef _UTILS_HPP_
-# define _UTILS_HPP_
-
+#ifndef _UTILS_BOMBER_HPP_
+# define _UTILS_BOMBER_HPP_
 
 #include <vector>
 #include <iostream>
-
-namespace engine
-{
-  int		generateUid();
-}
 
 namespace bomber
 {
@@ -18,4 +12,4 @@ namespace bomber
 }
 
 
-#endif /* _UTILS_HPP_ */
+#endif /* _UTILS_BOMBER_HPP_ */

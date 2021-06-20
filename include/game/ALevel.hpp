@@ -14,17 +14,10 @@ namespace bomber
   class ALevel
   {
   public:
-    virtual void update(Core &c) = 0;
+    virtual void						update(Core &c) = 0;
 
-    const std::vector<std::shared_ptr<engine::AActor>>& getActors() const
-    {
-      return map->getActors();
-    }
-
-    const Map&				getMap() const
-    {
-      return *map;
-    }
+    const std::vector<std::shared_ptr<engine::AActor>>&		getActors() const;
+    const Map&							getMap() const;
     
   protected:
     std::unique_ptr<Map>		map;

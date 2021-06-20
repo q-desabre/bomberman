@@ -1,6 +1,6 @@
 
 #ifndef _IWINDOW_HPP_
-# define _WINDOW_HPP_
+# define _IWINDOW_HPP_
 
 #include <iostream>
 

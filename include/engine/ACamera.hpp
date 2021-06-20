@@ -18,10 +18,7 @@ namespace engine
     virtual void		setPosition(const v3& newPos) = 0;
     virtual void		setTarget(const v3& newTarget) = 0;
     virtual void		setMode3D(bool status) = 0;
-    virtual const v3&		getPosition() const
-    {
-      return position;
-    }
+    virtual const v3&		getPosition() const;
     
   protected:
     Vec3<float> position;

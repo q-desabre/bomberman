@@ -1,20 +1,10 @@
 
-#ifndef _RAYANIMATION_HPP_
-# define _RAYANIMATION_HPP_
-
-#include <iostream>
-#include <string>
-#include <vector>
-#include <Vector.hpp>
-#include <sstream>
-#include "AActor.hpp"
+#include "RayAnimation.hpp"
+#include "TextureManager.hpp"
 
 namespace engine
 {
-  class RayAnimation : public engine::AActor
-  {
-  public:
-    RayAnimation(const std::string& pathObj, const std::string& textureName,
+    RayAnimation::RayAnimation(const std::string& pathObj, const std::string& textureName,
 	     int _nbFrames) : nbFrames(_nbFrames), models(_nbFrames)
     {
       this->scale.x = 0.25f;
@@ -37,12 +27,7 @@ namespace engine
       }
     }
 
-    ~RayAnimation()
-    {
-
-    }
-
-    virtual void		draw()
+    void		RayAnimation::draw()
     {
       DrawModelEx(models[currentFrame],
 		  (Vector3){position.x, position.y, position.z},
@@ -54,7 +39,7 @@ namespace engine
 	currentFrame = 0;
     }
 
-    virtual void		draw(int frame)
+    void		RayAnimation::draw(int frame)
     {
       currentFrame = 0;
       DrawModelEx(models[0],
@@ -63,17 +48,5 @@ namespace engine
 		  angleRotation,
 		  (Vector3){scale.x, scale.y, scale.z}, WHITE);
     }
-
-  protected:
-    int			nbFrames;
-    int			currentFrame;
-    Texture2D		texture;
-    Color		color;
-    std::vector<Model>	models;
-  };
   
-    
 }
-
-
-#endif /* _CUBE_HPP_ */

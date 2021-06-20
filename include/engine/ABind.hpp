@@ -14,10 +14,7 @@ namespace engine
     virtual void	addBind(Event e, int key) = 0;
     virtual void	update() = 0;
 
-    bool		isEvent(Event e) const
-    {
-      return (values.at(e));
-    }
+    bool		isEvent(Event e) const;
     
   protected:
     std::map<Event, int>	binds;

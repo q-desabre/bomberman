@@ -6,17 +6,14 @@
 
 namespace bomber
 {
+  class Core;
+  
   class	MenuLevel : public ALevel
   {
   public:
-    MenuLevel() {}
-    ~MenuLevel() {}
+    MenuLevel();
     
-    void		update()
-    {
-
-    }
-    
+    void		update(Core &c);
   };
 
 }
