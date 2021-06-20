@@ -14,7 +14,7 @@ namespace engine
   class RayAnimation : public engine::AActor
   {
   public:
-    RayAnimation(const std::string& pathObj, const std::string& pathTexture,
+    RayAnimation(const std::string& pathObj, const std::string& textureName,
 	     int _nbFrames) : nbFrames(_nbFrames), models(_nbFrames)
     {
       this->scale.x = 0.25f;
@@ -32,7 +32,7 @@ namespace engine
 	  ss << "0";
 	ss << i << ".obj";
 	models[i - 1] = LoadModel(ss.str().c_str());
-	texture = LoadTexture(pathTexture.c_str());
+	texture = TextureManager<Texture2D>::getInstance().getTexture(textureName);
 	models[i - 1].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
       }
     }

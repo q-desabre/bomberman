@@ -16,8 +16,8 @@ namespace bomber
   class Cube : public engine::RayCube
   {
   public:
-    Cube(Vec3<float> p, const std::string& texture_path, BlockType t = UNBREAKABLE)
-      : engine::RayCube(p, texture_path), type(t)
+    Cube(Vec3<float> p, const std::string& textureName, BlockType t = UNBREAKABLE)
+      : engine::RayCube(p, textureName), type(t)
     {
       type = t;
     }

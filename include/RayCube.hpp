@@ -6,6 +6,7 @@
 #include <sstream>
 #include "AActor.hpp"
 #include "RayCollisionBox.hpp"
+#include "TextureManager.hpp"
 
 namespace engine
 {
@@ -29,12 +30,11 @@ namespace engine
     }
 
     RayCube(const v3& p = Vec3<float>(0, 0, 0),
-	    const std::string& texture_path = "../assets/default.png")
+	    const std::string& textureName = "default")
     {
       this->isTextured = true;
       this->color = WHITE;
-      texture = LoadTexture(texture_path.c_str());
-      //      SetTextureFilter(this->texture, TEXTURE_FILTER_TRILINEAR); 
+      texture = TextureManager<Texture2D>::getInstance().getTexture(textureName);
       this->size.x = CUBE_SIZE;
       this->size.y = CUBE_HEIGHT;
       this->size.z = CUBE_SIZE;
@@ -68,10 +68,12 @@ namespace engine
 
     void		draw()
     {
-      // DrawCube((Vector3){position.x, position.y, position.z},
-      // 	       size.x, size.y, size.z, color);
-      DrawCubeTexture(this->texture, (Vector3){position.x, position.y, position.z},
-      	       size.x, size.y, size.z, color);
+      if (isTextured)
+	DrawCubeTexture(this->texture, (Vector3){position.x, position.y, position.z},
+			size.x, size.y, size.z, color);
+      else
+	DrawCube((Vector3){position.x, position.y, position.z},
+		 size.x, size.y, size.z, color);
       // DrawCubeWires((Vector3){position.x, position.y, position.z},
       // 		    size.x, size.y, size.z, BLACK);
     }

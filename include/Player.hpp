@@ -22,11 +22,10 @@ namespace bomber
       this->isMoving = false;
       if (id == 1) 
 	this->model = std::make_unique<engine::RayAnimation>("../assets/steve/steve_0000",
-							     "../assets/steve/skin.png", 40);
+							     "player1", 40);
       else if (id == 2)
 	this->model = std::make_unique<engine::RayAnimation>("../assets/steve/steve_0000",
-							     "../assets/steve/skin2.png", 40);
-      	
+							     "player2", 40);
       this->collisionBox = std::make_unique<engine::RayCollisionBox>(this->model->getPosition(),
 								     Vec3<float>(0.55, 0.55, 0.55));
     }

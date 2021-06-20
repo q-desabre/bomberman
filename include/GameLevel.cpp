@@ -15,7 +15,7 @@ void		bomber::GameLevel::update(Core &c)
   static float	radius = 0;
   static float	degree = 90;
   static bool	first = true;
-  if (!isStarting == true)
+  if (isStarting == true)
     {
       if (first) {
 	c.getRenderer().setPosition(v3(0, 1, 0));

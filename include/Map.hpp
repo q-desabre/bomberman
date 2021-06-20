@@ -7,13 +7,27 @@
 # include "Cube.hpp"
 # include "Utils.hpp"
 # include "AnimatedCube.hpp"
+# include "TextureManager.hpp"
 
 namespace bomber
 {
   class Map
   {
+  private:
+    int							width = 0;
+    int							height = 0;
+    std::vector<std::string>				map;
+    std::vector<std::shared_ptr<engine::AActor>>	actors;
+    std::vector<std::shared_ptr<engine::ICollidable>>	collidableActors;
+
   public:
     Map(const std::string& path, int nbPlayer = 2)
+    {
+      baseInit(path);
+      generateBreakable();
+    }
+
+    void		baseInit(const std::string &path)
     {
       std::shared_ptr<Cube>		tmp;
       int				y = 0;
@@ -30,23 +44,21 @@ namespace bomber
 	  else {
 	    map.push_back(line);
 	    for (int i = 0; i != line.size(); i++) {
-	      addBlock(v3(i, -1.0f, height - (y - 1)), "../assets/block5.png", false);
+	      addBlock(v3(i, -1.0f, height - (y - 1)), "floorBlock", false);
 	      if (line[i] == 'X') {
-		addBlock(v3(i, -0.5f, height - (y - 1)), "../assets/block4.png", true);
+		addBlock(v3(i, -0.5f, height - (y - 1)), "unbreakableBlock", true);
 	      }
 	    }
 	  }
 	  y++;
 	}
-	tmp = std::make_shared<Cube>(v3(0, -engine::CUBE_HEIGHT / 2 - 1, 0),
-				     "../assets/block_background.png");
+	tmp = std::make_shared<Cube>(v3(0, -engine::CUBE_HEIGHT / 2 - 1, 0), "background");
 	tmp->setSize(v3(2.5f * width, 0.2f, height * 2.5f));
 	addActor(tmp);
       }
       myFile.close();
-      generateBreakable();
     }
-
+    
     void		generateBreakable()
     {
       int		x = 0;
@@ -58,14 +70,14 @@ namespace bomber
 	x = rand() % (width - 1);
 	y = rand() % (height - 1);
 	if (isSpawnOk(map, y, x)) {
-	  addBlock(v3(x, -0.5f, y), "../assets/block_brick.png", true, BREAKABLE);
+	  addBlock(v3(x, -0.5f, y), "breakableBlock", true, BREAKABLE);
 	  map[y][x] = 'b';
 	  i++;
 	}
       }
     }
   
-    void		addBlock(const v3& pos, const std::string& path, bool collide,
+    void		addBlock(const v3& pos, const std::string& textureName, bool collide,
 				 BlockType t = UNBREAKABLE)
     {
       std::shared_ptr<Cube>		tmp;
@@ -75,44 +87,33 @@ namespace bomber
 				      (engine::CUBE_HEIGHT / 2) + pos.y,
 				      height * (engine::CUBE_SIZE / 2) -
 				      (engine::CUBE_SIZE / 2) - pos.z),
-				   path.c_str(), t);
+				   textureName, t);
       if (collide)
 	collidableActors.push_back(tmp);
       addActor(tmp);
     }
 
-    void		addAnimatedBlock(const v3& pos, const std::string& path, bool collide,
-				 BlockType t = UNBREAKABLE)
+    void		addAnimatedBlock(const v3& pos, const std::string& textureName, bool collide,
+					 BlockType t = UNBREAKABLE)
     {
-      std::shared_ptr<AnimatedCube>		tmp;
+      // Need new specific gestion to handle multiple texture
+      // std::shared_ptr<AnimatedCube>		tmp;
 
-      tmp = std::make_shared<AnimatedCube>(v3(width * -(engine::CUBE_SIZE / 2) +
-				      (engine::CUBE_SIZE / 2) + pos.x,
-				      (engine::CUBE_HEIGHT / 2) + pos.y  - 0.48f,
-				      height * (engine::CUBE_SIZE / 2) -
-				      (engine::CUBE_SIZE / 2) - pos.z),
-				   path.c_str(), 5);
-      if (collide)
-	collidableActors.push_back(tmp);
-      addActor(tmp);
+      // tmp = std::make_shared<AnimatedCube>(v3(width * -(engine::CUBE_SIZE / 2) +
+      // 					      (engine::CUBE_SIZE / 2) + pos.x,
+      // 					      (engine::CUBE_HEIGHT / 2) + pos.y  - 0.48f,
+      // 					      height * (engine::CUBE_SIZE / 2) -
+      // 					      (engine::CUBE_SIZE / 2) - pos.z),
+      // 					   textureName, 5);
+      // if (collide)
+      // 	collidableActors.push_back(tmp);
+      // addActor(tmp);
     }
 
-    ~Map() {}
 
-    const std::vector<std::shared_ptr<engine::AActor>>&	getActors() const
-    {
-      return (this->actors);
-    }
-
-    const std::vector<std::shared_ptr<engine::ICollidable>>&	getCollidableActors() const
-    {
-      return (this->collidableActors);
-    }
-
-    const std::vector<std::string>&		getData() const
-    {
-      return map;
-    }
+    // -------------------------------------------------------------------------------------------
+    // ---------------------------------    GESTION ACTOR   --------------------------------------
+    // -------------------------------------------------------------------------------------------
     
     void			addActor(std::shared_ptr<engine::AActor> actor)
     {
@@ -121,7 +122,6 @@ namespace bomber
       
     void			removeActor(std::shared_ptr<engine::AActor> actor)
     {
-      std::cout << "Remove id : " << actor->getUid() << " / " << actors.size() << std::endl;
       for (int i = 0; i != actors.size(); i++) {
 	if (actors[i]->getUid() == actor->getUid()) {
 	  actors.erase(actors.begin() + i);
@@ -138,6 +138,30 @@ namespace bomber
 	  break;
 	}
       }
+    }
+    
+    void			addCollidableActor(std::shared_ptr<engine::ICollidable> actor)
+    {
+      collidableActors.push_back(actor);
+    }
+
+    // -------------------------------------------------------------------------------------------
+    // --------------------------------       GETTER      ----------------------------------------
+    // -------------------------------------------------------------------------------------------
+
+        const std::vector<std::shared_ptr<engine::AActor>>&	getActors() const
+    {
+      return (this->actors);
+    }
+
+    const std::vector<std::shared_ptr<engine::ICollidable>>&	getCollidableActors() const
+    {
+      return (this->collidableActors);
+    }
+
+    const std::vector<std::string>&		getData() const
+    {
+      return map;
     }
 
     std::shared_ptr<engine::AActor>	getActorByUid(int uid)
@@ -158,17 +182,6 @@ namespace bomber
       return nullptr;
     }
     
-    void			addCollidableActor(std::shared_ptr<engine::ICollidable> actor)
-    {
-      collidableActors.push_back(actor);
-    }
-      
-  private:
-    int				width = 0;
-    int				height = 0;
-    std::vector<std::string>	map;
-    std::vector<std::shared_ptr<engine::AActor>>	actors;
-    std::vector<std::shared_ptr<engine::ICollidable>>	collidableActors;
   };
 }
 

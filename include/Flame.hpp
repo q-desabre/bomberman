@@ -7,6 +7,7 @@
 # include "AActor.hpp"
 # include "ICollidable.hpp"
 # include "Timer.hpp"
+# include "TextureManager.hpp"
 
 namespace bomber
 {
@@ -15,20 +16,19 @@ namespace bomber
   public:
     Flame(const v3& pos)
     {
-      v3 newPos(pos.x - std::fmod(pos.x, 1.0f),
-		pos.y,
-		pos.z - std::fmod(pos.z, 1.0f));
+      v3 newPos(pos.x - std::fmod(pos.x, 1.0f), pos.y, pos.z - std::fmod(pos.z, 1.0f));
+      
       this->randTime = (rand() % 16) / 100;
       this->randScale = 0.75f + (rand() % 25) / 100;
       this->currentTexture = 0;
       this->position = newPos;
       this->collisionBox = std::make_unique<engine::RayCollisionBox>(newPos, v3(0.55, 0.55, 0.55));
       this->model = LoadModelFromMesh(GenMeshSphere(0.5f, 32, 32));
-      this->texture[0] = LoadTexture("../assets/flame/flame0.png");
-      this->texture[1] = LoadTexture("../assets/flame/flame1.png");
-      this->texture[2] = LoadTexture("../assets/flame/flame2.png");
-      this->texture[3] = LoadTexture("../assets/flame/flame3.png");
-      this->texture[4] = LoadTexture("../assets/flame/flame4.png");
+      this->texture[0] = engine::TextureManager<Texture2D>::getInstance().getTexture("flame0");
+      this->texture[1] = engine::TextureManager<Texture2D>::getInstance().getTexture("flame1");
+      this->texture[2] = engine::TextureManager<Texture2D>::getInstance().getTexture("flame2");
+      this->texture[3] = engine::TextureManager<Texture2D>::getInstance().getTexture("flame3");
+      this->texture[4] = engine::TextureManager<Texture2D>::getInstance().getTexture("flame4");
       this->model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = this->texture[0];
     }
 
@@ -74,7 +74,7 @@ namespace bomber
     float				randScale;
     float				randTime;
     Model				model;
-    int				currentTexture;
+    int					currentTexture;
     Texture2D				texture[5];
     engine::Timer			timerAnimation;
   };
