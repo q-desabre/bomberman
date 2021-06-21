@@ -1,5 +1,6 @@
 
 #include "Core.hpp"
+#include "MenuLevel.hpp"
 
 namespace bomber
 {
@@ -11,7 +12,7 @@ namespace bomber
     this->keybind = std::make_unique<engine::RayBind>();
     this->renderer = std::make_unique<engine::RayRenderer>();
     this->init();
-    this->levels.push(std::make_unique<GameLevel>(*this));
+    this->levels.push(std::make_unique<MenuLevel>(*this));
   }
 
   void			Core::init()
@@ -33,8 +34,18 @@ namespace bomber
     tm.loadTexture("unbreakableBlock", LoadTexture("../assets/block4.png"));
     tm.loadTexture("breakableBlock", LoadTexture("../assets/block_brick.png"));
     tm.loadTexture("background", LoadTexture("../assets/block_background.png"));	     
+    tm.loadTexture("title", LoadTexture("../assets/title.png"));	     
+    tm.loadTexture("ButtonBase", LoadTexture("../assets/button/base.png"));	     
+    tm.loadTexture("ButtonHover", LoadTexture("../assets/button/hover.png"));	     
+    tm.loadTexture("ButtonClicked", LoadTexture("../assets/button/clicked.png"));	     
   }
 
+  void			Core::startGame(int nbP)
+  {
+    this->nbPlayer = nbP;
+    this->levels.push(std::make_unique<GameLevel>(*this));
+  }
+  
   void			Core::update()
   {
     this->keybind->update();
@@ -44,8 +55,8 @@ namespace bomber
   void			Core::draw()
   {
     this->renderer->clear();
-    this->renderer->draw(this->levels.top()->getMap().getActors());
-    this->renderer->draw(this->levels.top()->getWidgets());
+    this->renderer->draw(this->levels.top()->getMap().getActors(),
+			 this->levels.top()->getWidgets());
   }
 
   bool			Core::isRunning() const

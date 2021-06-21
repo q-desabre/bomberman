@@ -28,18 +28,8 @@ namespace engine
     this->window = std::make_unique<RayWindow>(width, height, name);
   }
 
-  void		RayRenderer::draw(const std::vector<std::shared_ptr<AWidget>>& widgets)
-  {
-    camera->setMode3D(false);
-
-    for (int i = 0; i != widgets.size(); i++) {
-      if (widgets[i]->getDrawableType() == WIDGET)
-	widgets[i]->draw();
-    }
-    EndDrawing();
-  }
-
-  void		RayRenderer::draw(const std::vector<std::shared_ptr<AActor>>& actors)
+  void		RayRenderer::draw(const std::vector<std::shared_ptr<AActor>>& actors,
+				  const std::vector<std::shared_ptr<AWidget>>& widgets)
   {
     BeginDrawing();
     camera->setMode3D(true);
@@ -48,9 +38,12 @@ namespace engine
       if (actors[i]->getDrawableType() == ACTOR)
 	actors[i]->draw();
     }
-
-
     camera->setMode3D(false);
+    for (int i = 0; i != widgets.size(); i++) {
+      if (widgets[i]->getDrawableType() == WIDGET)
+	widgets[i]->draw();
+    }
+    EndDrawing();
   }
 
 

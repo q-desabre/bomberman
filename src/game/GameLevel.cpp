@@ -8,17 +8,15 @@ namespace bomber
 
   GameLevel::GameLevel(Core &core)
   {
-    test = std::make_shared<engine::RayImage>(v2(10, 10), "flame0");
-    map = std::make_unique<Map>("../maps/map1.data", 2);
+    this->map = std::make_unique<Map>("../maps/map1.data", 2);
     for (int i = 0; i != core.getNbPlayer(); i++) {
       std::shared_ptr<Player> p = std::make_shared<Player>(i + 1);
-      players.push_back(p);
+      this->players.push_back(p);
       p->setPosition(map->getPlayerStart(i + 1));
-      map->addActor(p);
-      map->addCollidableActor(p);
+      this->map->addActor(p);
+      this->map->addCollidableActor(p);
     }
-    addWidget(this->test);
-    isStarting = true;
+    this->isStarting = true;
   }    
 
 

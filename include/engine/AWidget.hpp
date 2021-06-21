@@ -14,7 +14,7 @@ namespace engine
     void		update();
     
     const v2&		getPosition() const;
-    void		setPosition(const v2& v);
+    virtual void	setPosition(const v2& v);
     DrawableType	getDrawableType() const;
     
     

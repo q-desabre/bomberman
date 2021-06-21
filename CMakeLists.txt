@@ -20,6 +20,7 @@ add_executable(indieStudio src/main.cpp
   src/engine/ABind.cpp
   src/engine/ACamera.cpp
   src/engine/ACollider.cpp
+  src/engine/ARayButton.cpp
   src/engine/ARenderer.cpp
   src/engine/AWidget.cpp
   src/engine/RayAnimatedCube.cpp
@@ -29,6 +30,7 @@ add_executable(indieStudio src/main.cpp
   src/engine/RayCollisionBox.cpp
   src/engine/RayCube.cpp
   src/engine/RayModel.cpp
+  src/engine/RaySkyBox.cpp
   src/engine/RayRenderer.cpp
   src/engine/RayText.cpp
   src/engine/RayImage.cpp
@@ -42,6 +44,7 @@ add_executable(indieStudio src/main.cpp
   src/game/Map.cpp
   src/game/MenuLevel.cpp
   src/game/Player.cpp
+  src/game/PlayButton.cpp
   src/game/PowerUpFlame.cpp
   src/game/Utils.cpp
   )

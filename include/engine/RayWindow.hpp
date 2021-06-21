@@ -12,6 +12,7 @@ namespace engine
   public:
     RayWindow(const int screenWidth, const int screenHeight, const std::string& name)
     {
+      SetConfigFlags(FLAG_WINDOW_RESIZABLE);
       initWindow(screenWidth, screenHeight, name);
     }
     

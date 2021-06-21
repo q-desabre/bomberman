@@ -3,6 +3,7 @@
 # define _KEYBINDS_HPP_
 
 # include <map>
+# include "Vector.hpp"
 # include "Event.hpp"
 
 namespace engine
@@ -15,8 +16,12 @@ namespace engine
     virtual void	update() = 0;
 
     bool		isEvent(Event e) const;
+    const v2&		getMousePosition() const;
+    bool		isMouseClicked() const;
     
   protected:
+    bool			mouseClicked;
+    v2				mousePose;
     std::map<Event, int>	binds;
     std::map<Event, bool>	values;
   };

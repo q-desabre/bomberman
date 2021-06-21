@@ -29,6 +29,9 @@ namespace engine
   {
     std::map<Event, int>::iterator it;
 
+    mousePose.x = GetMousePosition().x;
+    mousePose.y = GetMousePosition().y;
+    mouseClicked = IsMouseButtonDown(MOUSE_BUTTON_LEFT);
     for (it = binds.begin(); it != binds.end(); it++) {
       this->values[it->first] = IsKeyDown(it->second);
     }

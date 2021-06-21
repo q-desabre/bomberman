@@ -18,8 +18,8 @@ namespace engine
 
     void        initCamera(const v3& pos, const v3& target, const v3& up, float fovy);
     void	initWindow(const int width, const int height, const std::string& name);
-    void        draw(const std::vector<std::shared_ptr<AWidget>>&);
-    void	draw(const std::vector<std::shared_ptr<AActor>>& actors);
+    void        draw(const std::vector<std::shared_ptr<AActor>>&,
+		     const std::vector<std::shared_ptr<AWidget>>&);
     void	setFps(int maxFps);
   };
 }

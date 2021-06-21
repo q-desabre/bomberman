@@ -20,6 +20,7 @@ namespace bomber
     void			init();
     void			update();
     void			draw();
+    void			startGame(int nbP);
     bool			isRunning() const;
     void			stop();    
     engine::ARenderer&		getRenderer();

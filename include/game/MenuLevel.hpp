@@ -3,6 +3,9 @@
 # define MENU_LEVEL_HPP
 
 # include "ALevel.hpp"
+# include "RayImage.hpp"
+# include "RaySkyBox.hpp"
+# include "PlayButton.hpp"
 
 namespace bomber
 {
@@ -11,9 +14,14 @@ namespace bomber
   class	MenuLevel : public ALevel
   {
   public:
-    MenuLevel();
+    MenuLevel(Core &core);
     
     void		update(Core &c);
+
+  private:
+    std::shared_ptr<PlayButton>				playButton;
+    std::shared_ptr<engine::RaySkyBox>			skybox;
+    std::shared_ptr<engine::RayImage>			test;
   };
 
 }

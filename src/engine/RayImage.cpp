@@ -6,16 +6,19 @@ namespace engine
 {
   RayImage::RayImage(const v2& pos, const std::string& tm, float s)
   {
+    this->texture = TextureManager<Texture2D>::getInstance().getTexture(tm);
     this->position.x = pos.x;
     this->position.y = pos.y;
-    this->texture = TextureManager<Texture2D>::getInstance().getTexture(tm);
     this->scale = s;
     this->color = WHITE;
   }
 
   void		RayImage::draw()
   {
-    DrawTexture(this->texture, this->position.x, this->position.y, this->color);
+    DrawTexture(this->texture,
+		(GetScreenWidth() / 100.0f) * position.x - this->texture.width / 2,
+		(GetScreenHeight() / 100.0f)  * position.y - this->texture.height / 2,
+		this->color);
   }
 
   void		RayImage::setScale(float s)

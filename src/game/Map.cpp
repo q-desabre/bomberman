@@ -3,6 +3,11 @@
 
 namespace bomber
 {
+  Map::Map()
+  {
+    std::cout << "Empty Map" << std::endl;
+  }
+
   Map::Map(const std::string& path, int nbPlayer = 2)
   {
     baseInit(path);

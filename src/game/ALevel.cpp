@@ -23,4 +23,5 @@ namespace bomber
   {
     return *map;
   }
+
 }

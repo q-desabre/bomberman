@@ -21,6 +21,7 @@ namespace bomber
     std::vector<std::shared_ptr<engine::ICollidable>>	collidableActors;
 
   public:
+    Map();
     Map(const std::string& path, int nbPlayer);
 
     void	baseInit(const std::string &path);

@@ -20,7 +20,7 @@ namespace engine
     void		setScale(float s);
     float		getScale() const;
     void		setTint(Color c);
-    
+
   protected:
     Texture2D		texture;
     float		scale;
