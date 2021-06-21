@@ -6,11 +6,12 @@ namespace bomber
   Core::Core()
   {
     srand(time(NULL));
+    this->nbPlayer = 2;
     this->running = true;
     this->keybind = std::make_unique<engine::RayBind>();
     this->renderer = std::make_unique<engine::RayRenderer>();
     this->init();
-    this->levels.push(std::make_unique<GameLevel>());
+    this->levels.push(std::make_unique<GameLevel>(*this));
   }
 
   void			Core::init()
@@ -18,6 +19,10 @@ namespace bomber
     engine::TextureManager<Texture2D>&	tm = engine::TextureManager<Texture2D>::getInstance();
     tm.loadTexture("player1", LoadTexture("../assets/steve/skin.png"));
     tm.loadTexture("player2", LoadTexture("../assets/steve/skin2.png"));
+    tm.loadTexture("PowerFlame", LoadTexture("../assets/PowerUp/Flame.png"));
+    tm.loadTexture("PowerBomb", LoadTexture("../assets/PowerUp/Bomb.png"));
+    tm.loadTexture("PowerSpeed", LoadTexture("../assets/PowerUp/Speed.png"));
+    tm.loadTexture("PowerWallPass", LoadTexture("../assets/PowerUp/WallPass.png"));
     tm.loadTexture("flame0", LoadTexture("../assets/flame/flame0.png"));
     tm.loadTexture("flame1", LoadTexture("../assets/flame/flame1.png"));
     tm.loadTexture("flame2", LoadTexture("../assets/flame/flame2.png"));
@@ -40,6 +45,7 @@ namespace bomber
   {
     this->renderer->clear();
     this->renderer->draw(this->levels.top()->getMap().getActors());
+    this->renderer->draw(this->levels.top()->getWidgets());
   }
 
   bool			Core::isRunning() const
@@ -61,6 +67,16 @@ namespace bomber
   {
     return (*this->keybind);
   }
-    
+
+  int		        Core::getNbPlayer() const
+  {
+    return this->nbPlayer;
+  }
+
+  void			Core::setNbPlayer(int nb)
+  {
+    this->nbPlayer = nb;
+  }
+
 
 }

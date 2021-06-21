@@ -14,11 +14,14 @@ namespace bomber
   class Player : public engine::AActor, public engine::ICollidable
   {
   private:
-    int						power;
-    int						bombMax;
     bool					alive;
     bool					isMoving;
+    bool					wallPass;
+    int						power;
+    bool					canSpawnBomb;
+    int						bombMax;
     int						id;
+    float					speed;
     std::vector<std::shared_ptr<Bomb>>		bombs;
     std::unique_ptr<engine::RayAnimation>	model;
     std::unique_ptr<engine::ACollider>		collisionBox;
@@ -39,6 +42,7 @@ namespace bomber
     void		movementCollide(const v3& tmpPos, Map &map);    
     bool		collideWithCube(const v3& tmpPos, Map &map, int i);
     bool		collideWithBomb(const v3& tmpPos, Map &map, int i);
+    bool		collideWithFlame(const v3& tmpPos, Map &map, int i);
     
     void		draw();
     
@@ -48,11 +52,16 @@ namespace bomber
     void		setPower(int p);
     int			getPower() const;
 
+    void		setSpeed(float newSpeed);
+    float		getSpeed() const;
+
     void		setBombMax(int bm);
     int			getBombMax() const;
     
     int			getUid() const;
 
+    void		setWallPass(bool b);
+    
     const engine::ACollider&	getCollider() const;
     bool			collide(const engine::ACollider& other) const;
   };

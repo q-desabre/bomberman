@@ -16,79 +16,15 @@ namespace engine
   class RayCube : public AActor, public ICollidable
   {
   public:
-    RayCube(const v3& p = Vec3<float>(0, 0, 0))
-    {
-      this->color = WHITE;
-      this->isTextured = false;
-      this->size.x = CUBE_SIZE;
-      this->size.y = CUBE_HEIGHT;
-      this->size.z = CUBE_SIZE;
-      this->position.x = p.x;
-      this->position.y = p.y;
-      this->position.z = p.z;
-      this->collisionBox = new RayCollisionBox(this->position, this->size);
-    }
+    RayCube(const v3& p = Vec3<float>(0, 0, 0));
+    RayCube(const v3& p = Vec3<float>(0, 0, 0), const std::string& textureName = "default");
 
-    RayCube(const v3& p = Vec3<float>(0, 0, 0),
-	    const std::string& textureName = "default")
-    {
-      this->isTextured = true;
-      this->color = WHITE;
-      texture = TextureManager<Texture2D>::getInstance().getTexture(textureName);
-      this->size.x = CUBE_SIZE;
-      this->size.y = CUBE_HEIGHT;
-      this->size.z = CUBE_SIZE;
-      this->position.x = p.x;
-      this->position.y = p.y;
-      this->position.z = p.z;
-      this->collisionBox = new RayCollisionBox(this->position, this->size);
-    }
-
-    ~RayCube()
-    {
-
-    }
-
-
-    int			getUid() const
-    {
-      return uid;
-    }
-
-    const engine::ACollider&	getCollider() const
-    {
-      return *(this->collisionBox);
-    }
-
-    bool		collide(const engine::ACollider& other) const
-    {
-      return this->collisionBox->collide(other);
-    }
-
-
-    void		draw()
-    {
-      if (isTextured)
-	DrawCubeTexture(this->texture, (Vector3){position.x, position.y, position.z},
-			size.x, size.y, size.z, color);
-      else
-	DrawCube((Vector3){position.x, position.y, position.z},
-		 size.x, size.y, size.z, color);
-      // DrawCubeWires((Vector3){position.x, position.y, position.z},
-      // 		    size.x, size.y, size.z, BLACK);
-    }
-
-    void		setSize(const Vec3<float>& s)
-    {
-      this->size.x = s.x;
-      this->size.y = s.y;
-      this->size.z = s.z;
-    }
-    
-    bool		hasTexture() const
-    {
-      return this->isTextured;
-    }
+    int				getUid() const;
+    void			draw();
+    void			setSize(const Vec3<float>& s);
+    bool			hasTexture() const;
+    const engine::ACollider&	getCollider() const;
+    bool			collide(const engine::ACollider& other) const;
     
   protected:
     bool	isTextured;

@@ -35,8 +35,8 @@ namespace bomber
     void	removeActor(std::shared_ptr<engine::AActor> actor);
     void	removeCollidableActor(std::shared_ptr<engine::ICollidable> actor);
     
+    v3		getPlayerStart(int);
     
-
     const std::vector<std::shared_ptr<engine::AActor>>&		getActors() const;
     const std::vector<std::shared_ptr<engine::ICollidable>>&	getCollidableActors() const;
     const std::vector<std::string>&				getData() const;

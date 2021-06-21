@@ -6,6 +6,7 @@
 # include <vector>
 # include "Map.hpp"
 # include "AActor.hpp"
+# include "AWidget.hpp"
 
 namespace bomber
 {
@@ -14,13 +15,16 @@ namespace bomber
   class ALevel
   {
   public:
-    virtual void						update(Core &c) = 0;
-
+    virtual void	update(Core &c) = 0;
+    void		addWidget(std::shared_ptr<engine::AWidget> widg);
+    
+    const std::vector<std::shared_ptr<engine::AWidget>>&	getWidgets() const;
     const std::vector<std::shared_ptr<engine::AActor>>&		getActors() const;
     const Map&							getMap() const;
     
   protected:
-    std::unique_ptr<Map>		map;
+    std::vector<std::shared_ptr<engine::AWidget>>	widgets;
+    std::unique_ptr<Map>				map;
   };
 
 }

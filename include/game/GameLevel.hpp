@@ -4,6 +4,7 @@
 
 # include "ALevel.hpp"
 # include "Player.hpp"
+# include "RayImage.hpp"
 
 namespace bomber
 {
@@ -12,16 +13,16 @@ namespace bomber
   class	GameLevel : public ALevel
   {
   public:
-    GameLevel();
+    GameLevel(Core &core);
 
     void				startAnim(Core &c);
     void				update(Core &c);
     
   private:
-    std::shared_ptr<Player>		p1;
-    std::shared_ptr<Player>		p2;
-    engine::Timer			timer;
-    bool				isStarting;
+    std::shared_ptr<engine::RayImage>			test;
+    std::vector<std::shared_ptr<Player>>		players;
+    engine::Timer					timer;
+    bool						isStarting;
   };
 
 }

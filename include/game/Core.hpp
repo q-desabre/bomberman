@@ -24,8 +24,11 @@ namespace bomber
     void			stop();    
     engine::ARenderer&		getRenderer();
     engine::ABind&		getKeybind();
+    int				getNbPlayer() const;
+    void			setNbPlayer(int);
     
   private:
+    int					nbPlayer;
     bool				running;
     std::stack<std::unique_ptr<ALevel>>	levels;
     std::unique_ptr<engine::ABind>	keybind;

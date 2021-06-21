@@ -17,7 +17,7 @@ namespace engine
      PLAYER2_LEFT,
      PLAYER2_UP,
      PLAYER2_DOWN,
-     PLAYER2_ACTION1,
+     PLAYER2_ACTION,
      PLAYER2_ACTION2,
      EXIT
     };

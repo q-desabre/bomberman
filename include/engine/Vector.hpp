@@ -80,5 +80,6 @@ std::ostream& operator<<( std::ostream &flux, Vec3<T> const& v )
 
 
 typedef Vec3<float> v3;
+typedef Vec2<float> v2;
 
 #endif /* _VECTOR_HPP_ */

@@ -9,6 +9,8 @@ namespace bomber
     this->bombMax = 1;
     this->power = 2;
     this->alive = true;
+    this->canSpawnBomb = true;
+    this->wallPass = false;
     this->isMoving = false;
     if (id == 1) 
       this->model = std::make_unique<engine::RayAnimation>("../assets/steve/steve_0000",
@@ -18,12 +20,12 @@ namespace bomber
 							   "player2", 40);
     this->collisionBox = std::make_unique<engine::RayCollisionBox>(this->model->getPosition(),
 								   Vec3<float>(0.55, 0.55, 0.55));
+    std::cout << "create player id " << id << std::endl;
   }
     
 
   void		Player::update(const engine::ABind& key, Map& map)
   { // change to std::map<event, ptr method> depends on id
-
     updateBombs(map);
     action(key, map);
   }
@@ -32,13 +34,13 @@ namespace bomber
   {
     if (isAlive()) {
       Vec3<float> tmpPos = this->position;
-	
       if (id == 1) {
 	this->isMoving = false;
 	if (key.isEvent(engine::PLAYER1_DOWN)) moveDown(map);
 	if (key.isEvent(engine::PLAYER1_UP)) moveUp(map);
 	if (key.isEvent(engine::PLAYER1_RIGHT)) moveRight(map);
 	if (key.isEvent(engine::PLAYER1_LEFT)) moveLeft(map);
+	movementCollide(tmpPos, map);
 	if (key.isEvent(engine::PLAYER1_ACTION)) spawnBomb(map);
       } else if (id == 2) {
 	this->isMoving = false;
@@ -46,8 +48,9 @@ namespace bomber
 	if (key.isEvent(engine::PLAYER2_UP)) moveUp(map);
 	if (key.isEvent(engine::PLAYER2_RIGHT)) moveRight(map);
 	if (key.isEvent(engine::PLAYER2_LEFT)) moveLeft(map);
+	movementCollide(tmpPos, map);
+
       }
-      movementCollide(tmpPos, map);
     }
   }
 
@@ -68,12 +71,14 @@ namespace bomber
 
   void		Player::movementCollide(const v3& tmpPos, Map &map)
   {
-
     this->collisionBox->setPosition(this->position);
     for (int i = 0; i != map.getCollidableActors().size(); i++) {
       if (map.getCollidableActors()[i]->getUid() != this->getUid() &&
 	  map.getCollidableActors()[i]->collide(*collisionBox)) {
+	if (collideWithFlame(tmpPos, map, i)) return;
+	
 	if (collideWithBomb(tmpPos, map, i)) return;
+
 	if (collideWithCube(tmpPos, map, i)) return;
       }
     }
@@ -83,6 +88,10 @@ namespace bomber
   {
     Cube * c = dynamic_cast<Cube*>(map.getCollidableActors()[i].get());
     if (c && (c->getType() == BREAKABLE || c->getType() == UNBREAKABLE)) {
+      if (this->wallPass && c->getType() == BREAKABLE) {
+	canSpawnBomb = false;
+	return false;
+      }
       this->position = tmpPos;
       this->isMoving = false;
       this->collisionBox->setPosition(this->position);
@@ -90,16 +99,22 @@ namespace bomber
     } else if (c && c->getType() == BONUS) {
       APowerUp *p = dynamic_cast<APowerUp*>(c);
       p->effect(*this);
-      std::cout << "power up id " << p->getUid() << std::endl;
       map.removeActor(map.getActorByUid(c->getUid()));
-      std::cout << "remove actor " << c->getUid() << std::endl;;
       map.removeCollidableActor(map.getCollidableActorByUid(c->getUid()));
-      std::cout << " remove collidable " << c->getUid() << std::endl;
-      return false;
+      return true;
     }
     return false;
   }
 
+  bool		Player::collideWithFlame(const v3& tmpPos, Map &map, int i)
+  {
+    Flame * f = dynamic_cast<Flame*>(map.getCollidableActors()[i].get());
+    if (f) {
+      this->die();
+      return true;
+    }
+    return false;
+  }
 
   bool		Player::collideWithBomb(const v3& tmpPos, Map &map, int i)
   {
@@ -118,6 +133,8 @@ namespace bomber
 
   void		Player::spawnBomb(Map& map)
   {
+    if (!canSpawnBomb)
+      return;
     for (int i = 0; i != bombs.size(); i++) {
       if (this->collide(bombs[i]->getCollider()))
 	return;
@@ -147,6 +164,7 @@ namespace bomber
 
   void		Player::moveUp(const Map& map)
   {
+    canSpawnBomb = true;
     this->isMoving = true;
     this->model->rotate(0.0f);
     this->position.z -= 0.1f;
@@ -154,6 +172,7 @@ namespace bomber
 
   void		Player::moveDown(const Map& map)
   {
+    canSpawnBomb = true;
     this->isMoving = true;
     this->model->rotate(180.0f);
     this->position.z += 0.1f;
@@ -161,6 +180,7 @@ namespace bomber
 
   void		Player::moveLeft(const Map& map)
   {
+      canSpawnBomb = true;
     this->isMoving = true;
     this->model->rotate(90.0f);
     this->position.x -= 0.1f;
@@ -168,6 +188,7 @@ namespace bomber
 
   void		Player::moveRight(const Map& map)
   {
+      canSpawnBomb = true;
     this->isMoving = true;
     this->model->rotate(-90.0f);
     this->position.x += 0.1f;
@@ -208,6 +229,22 @@ namespace bomber
     this->bombMax = bm;
   }
 
+  void	Player::setSpeed(float newSpeed)
+  {
+    if (newSpeed <= 0.8f)
+      this->speed = newSpeed;
+  }
+
+  void			Player::setWallPass(bool b)
+  {
+    this->wallPass = b;
+  }
+
+  float			Player::getSpeed() const
+  {
+    return this->speed;
+  }
+  
   int			Player::getUid() const
   {
     return uid;

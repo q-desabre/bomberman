@@ -5,6 +5,7 @@
 # include <vector>
 # include <memory>
 # include "AActor.hpp"
+# include "AWidget.hpp"
 # include "IWindow.hpp"
 # include "ACamera.hpp"
 
@@ -16,9 +17,8 @@ namespace engine
     ARenderer() {}
     virtual ~ARenderer() {}
 
-    virtual void        draw(const std::vector<IDrawable*>&) = 0;
+    virtual void        draw(const std::vector<std::shared_ptr<AWidget>>&) = 0;
     virtual void        draw(const std::vector<std::shared_ptr<AActor>>&) = 0;
-    virtual void        updateEvents() = 0;
     virtual void	setFps(int fpsMax) = 0;
     virtual void	initWindow(const int, const int, const std::string&) = 0;
     virtual void	initCamera(const v3& pos, const v3& target,

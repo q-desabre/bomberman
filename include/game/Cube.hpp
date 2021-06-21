@@ -21,6 +21,13 @@ namespace bomber
     Cube(Vec3<float> p, const std::string& textureName, BlockType t = UNBREAKABLE);
 
     void		spawnPowerUp(const v3& pos, Map &map);
+
+    // possible map on ptr method
+    void		spawnPowerFlame(const v3& pos, Map &map);
+    void		spawnPowerBomb(const v3& pos, Map &map);
+    void		spawnPowerSpeed(const v3& pos, Map &map);
+    void		spawnPowerWallPass(const v3& pos, Map &map);
+    
     BlockType		getType() const;
 
   private:

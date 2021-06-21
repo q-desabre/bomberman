@@ -6,27 +6,37 @@
 namespace bomber
 {
 
-  GameLevel::GameLevel()
+  GameLevel::GameLevel(Core &core)
   {
-    p1 = std::make_shared<Player>(1);
-    p2 = std::make_shared<Player>(2);
+    test = std::make_shared<engine::RayImage>(v2(10, 10), "flame0");
     map = std::make_unique<Map>("../maps/map1.data", 2);
-    p1->setPosition(Vec3<float>(-8.0f, 0, 5.0f));
-    p2->setPosition(Vec3<float>(8.0f, 0, -5.0f));
+    for (int i = 0; i != core.getNbPlayer(); i++) {
+      std::shared_ptr<Player> p = std::make_shared<Player>(i + 1);
+      players.push_back(p);
+      p->setPosition(map->getPlayerStart(i + 1));
+      map->addActor(p);
+      map->addCollidableActor(p);
+    }
+    addWidget(this->test);
     isStarting = true;
-    map->addActor(p1);
-    map->addCollidableActor(p1);
-    map->addActor(p2);
-    map->addCollidableActor(p2);
   }    
 
 
   void			GameLevel::update(Core &c)
   {
+    int			playerAlive = 0;
     startAnim(c);
-    p1->update(c.getKeybind(), *this->map);
-    p2->update(c.getKeybind(), *this->map);
+    for (int i = 0; i != c.getNbPlayer(); i++) {
+      if (players[i]->isAlive())
+	playerAlive++;
+      players[i]->update(c.getKeybind(), *this->map);
+    }
 
+    if (playerAlive == 1) {
+      std::cout << "We have a winner !" << std::endl;
+    } else if ( playerAlive == 0) {
+      std::cout << "It's a draw :( !" << std::endl;
+    }
     // check win con
     
   }

@@ -21,20 +21,29 @@ add_executable(indieStudio src/main.cpp
   src/engine/ACamera.cpp
   src/engine/ACollider.cpp
   src/engine/ARenderer.cpp
-  src/engine/RayAnimation.cpp
+  src/engine/AWidget.cpp
   src/engine/RayAnimatedCube.cpp
+  src/engine/RayAnimation.cpp
+  src/engine/RayBind.cpp
+  src/engine/RayCamera.cpp
+  src/engine/RayCollisionBox.cpp
+  src/engine/RayCube.cpp
+  src/engine/RayModel.cpp
+  src/engine/RayRenderer.cpp
+  src/engine/RayText.cpp
+  src/engine/RayImage.cpp
   src/engine/Utils.cpp
-  src/ALevel.cpp
-  src/Bomb.cpp
-  src/Core.cpp
-  src/Cube.cpp
-  src/Flame.cpp
-  src/GameLevel.cpp
-  src/Map.cpp
-  src/MenuLevel.cpp
-  src/Player.cpp
-  src/PowerUpFlame.cpp
-  src/Utils.cpp
+  src/game/ALevel.cpp
+  src/game/Bomb.cpp
+  src/game/Core.cpp
+  src/game/Cube.cpp
+  src/game/Flame.cpp
+  src/game/GameLevel.cpp
+  src/game/Map.cpp
+  src/game/MenuLevel.cpp
+  src/game/Player.cpp
+  src/game/PowerUpFlame.cpp
+  src/game/Utils.cpp
   )
 
 

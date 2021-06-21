@@ -29,6 +29,7 @@ namespace bomber
       std::shared_ptr<Flame> flame = std::make_shared<Flame>(v3(position.x, position.y, position.z));
       map.addActor(flame); // MOVE IT
       flames.push_back(flame);  // MOVE IT
+      lineFlame(map, v3(0, 0, 0));
       lineFlame(map, v3(1, 0, 0));
       lineFlame(map, v3(-1, 0, 0));
       lineFlame(map, v3(0, 0, 1));
@@ -48,6 +49,7 @@ namespace bomber
       for (int i = 0; i != flames.size(); i++)
 	{
 	  map.removeActor(flames[i]);
+	  map.removeCollidableActor(flames[i]);
 	  alive = false;
 	}
       flames.clear();
@@ -138,7 +140,10 @@ namespace bomber
 	  }
 	}
 	map.addActor(flame);
+	map.addCollidableActor(flame);
 	flames.push_back(flame);
+	if (direction.x == 0 && direction.y == 0 && direction.z == 0)
+	  return ;
       }
     }
   }
